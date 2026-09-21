@@ -20,6 +20,13 @@ Last verified against official docs: 2026-09-20. Version floors live in each ref
 
 ## 1. Operating modes (how Claude works)
 
+### 1.0 Language of work
+- **Conversation:** English by default. Switch only if the user's latest message is written in another language — then reply in that language.
+- **Technical terms stay in English** in every language (RAG, embedding, reranker, middleware, rung, endpoint, stack guide…). Translating them creates wrong words and ambiguity.
+- **Every generated artifact is English, always:** code, comments, identifiers, `docs/stack-guide.md`, `CLAUDE.md`, `tasks.md`, the constitution seed, commit messages, PR text, and tool-option labels in discovery questions.
+- **Product content is different:** UI strings, end-user prompts, sample data, and eval questions follow the project's language profile (§2 C) — Arabic content stays Arabic.
+- If a reply comes out in an unexpected language, check the user's global `CLAUDE.md` for a language instruction.
+
 ### 1.1 Kickoff mode — never code first
 1. Ask what it does: purpose, core entities, main use cases (≤ 4 focused questions).
 2. Run **Discovery (§2)**, then walk the **Decision Register (§6)** — ask only what is still open.

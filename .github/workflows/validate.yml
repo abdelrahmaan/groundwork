@@ -1,0 +1,52 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: Manifests and skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Unpinned on purpose: validation rules track the runtime, so we want to
+      # hear about a break when it lands, not after users do.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      # Two calls: pointed at a directory, validate resolves marketplace.json
+      # and stops, so plugin.json needs naming explicitly. --strict fails on
+      # unknown fields and missing skill paths, which the runtime only warns on.
+      - name: Validate marketplace manifest
+        run: claude plugin validate .claude-plugin/marketplace.json --strict
+
+      - name: Validate plugin manifest
+        run: claude plugin validate .claude-plugin/plugin.json --strict
+
+      - name: Check skill frontmatter budget
+        run: |
+          python3 - <<'PY'
+          import pathlib, sys
+
+          LIMIT = 1024
+          failed = False
+          for skill in sorted(pathlib.Path("skills").glob("*/SKILL.md")):
+              text = skill.read_text()
+              if not text.startswith("---\n"):
+                  print(f"FAIL {skill}: no YAML frontmatter")
+                  failed = True
+                  continue
+              body = text.split("---\n", 2)[1]
+              size = len(body)
+              status = "ok  " if size <= LIMIT else "FAIL"
+              print(f"{status} {skill}: {size}/{LIMIT} frontmatter chars")
+              failed |= size > LIMIT
+          sys.exit(1 if failed else 0)
+          PY

@@ -1,6 +1,6 @@
 ---
 name: groundwork
-description: Use when starting, scaffolding, planning, designing, reviewing or extending an API-first or Arabic-first product — backend, AI/agent/RAG, web or mobile — and alongside GitHub Spec Kit. Triggers: "new project", "scaffold", "MVP", "which stack should I use", "add an endpoint", "add a chatbot or agent or RAG", "add streaming", "build the frontend", "Flutter app", "review this code", or any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, or RTL/Arabic UI — even if this skill is not named. Also known as AbdoKamarKit.
+description: Use when starting, scaffolding, planning, designing, reviewing or extending an API-first or Arabic-first product — backend, AI/agent/RAG, web or mobile — and alongside GitHub Spec Kit. Triggers: "new project", "scaffold", "MVP", "which stack should I use", "add an endpoint", "add a chatbot or agent or RAG", "add streaming", "build the frontend", "Flutter app", "review this code", or any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, or RTL/Arabic UI — even if this skill is not named.
 ---
 
 # Groundwork

@@ -1,8 +1,11 @@
 # Groundwork
 
-*(a.k.a. AbdoKamarKit)* — an [Agent Skill](https://agentskills.io) that does the work **before** the code:
-interviews you about the goal, picks the stack with you, writes a binding stack guide, then builds an MVP slice
-to a production standard.
+An [Agent Skill](https://agentskills.io) that does the work **before** the code: it interviews you
+about the goal, picks the stack with you, writes a binding stack guide, then builds an MVP slice to
+a production standard.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757.svg)](#claude-code--as-a-plugin)
 
 Built for **API-first, Arabic-first products**:
 
@@ -10,6 +13,47 @@ Built for **API-first, Arabic-first products**:
 - **Web — React or Next.js**: React + Vite + TanStack by default behind a separate API; Next.js App Router when SEO matters. Tailwind + shadcn/ui, generated client, RTL-first.
 - **Mobile — Flutter**: Riverpod, dio, generated Dart client, secure storage, offline, RTL/i18n.
 - **One contract**: OpenAPI from FastAPI, RFC 9457 errors, typed SSE streaming events.
+
+## Install
+
+Pick **one** of the two routes. They install the same skill, so taking both leaves you with two
+copies of it.
+
+### Claude Code — as a plugin
+
+```bash
+/plugin marketplace add abdelrahmaan/groundwork
+/plugin install groundwork@abdokamar
+```
+
+A managed, read-only bundle: you subscribe to it, and `/plugin update groundwork` brings new
+versions. This route also installs the `/groundwork` command.
+
+### Any other agent — with the Skills CLI
+
+```bash
+npx skills@latest add abdelrahmaan/groundwork
+```
+
+Copies editable skill files into your project. Works with Claude Code, Codex, Cursor, OpenCode, and
+other agents that follow the Agent Skills standard. Update with `npx skills@latest update groundwork`.
+
+## Use it
+
+The skill fires on its own when a task matches its triggers — a new project, a new endpoint, a
+chatbot, a Flutter app, a code review. To call it directly:
+
+```
+/groundwork I want an Arabic-first booking API with a Flutter app
+/groundwork add streaming to the chat endpoint
+/groundwork review this branch
+```
+
+Called with no argument, it starts the discovery interview from the first question. On an existing
+repo it reads `docs/stack-guide.md` first, and those decisions override its own defaults.
+
+The `/groundwork` command ships with the plugin route only. On the Skills CLI route, ask for the
+skill by name instead.
 
 ## What happens when you call it
 
@@ -44,52 +88,17 @@ Groundwork discovery  →  docs/stack-guide.md
 /speckit.specify → clarify → plan → tasks → implement → converge
                       ↑ plan obeys the stack guide; it never invents a stack
 ```
-Details in `references/spec-kit.md`.
+
+Details in [`references/spec-kit.md`](./skills/groundwork/references/spec-kit.md).
 
 ## Opinions it holds (and why)
 
-- **LangChain `create_agent` for the agent layer, your own code for retrieval.** Frameworks earn their place on the hard generic part (tool loop, state, interrupts, streaming); they cost you on the part that's specific to you (chunking, hybrid fusion, Arabic normalization). Full comparison with LlamaIndex, Haystack, Pydantic AI and DSPy in `references/frameworks.md`.
+- **LangChain `create_agent` for the agent layer, your own code for retrieval.** Frameworks earn their place on the hard generic part (tool loop, state, interrupts, streaming); they cost you on the part that's specific to you (chunking, hybrid fusion, Arabic normalization). Full comparison with LlamaIndex, Haystack, Pydantic AI and DSPy in [`references/frameworks.md`](./skills/groundwork/references/frameworks.md).
 - **Every model behind an OpenAI-compatible endpoint** — OpenAI, Azure, LiteLLM, or self-hosted vLLM are a `.env` change, not a code change.
 
-## Install
+## What's inside
 
-Pick **one** of the two routes. They install the same skill, so taking both leaves you
-with two copies of it.
-
-### Claude Code — as a plugin
-
-```bash
-/plugin marketplace add abdelrahmaan/groundwork
-/plugin install groundwork@abdokamar
-```
-
-A managed, read-only bundle: you subscribe to it and `/plugin update` brings new versions.
-This route also gives you the `/groundwork` command.
-
-### Any other agent — with the Skills CLI
-
-```bash
-npx skills@latest add abdelrahmaan/groundwork
-```
-
-Copies editable skill files into your project. Works with Codex, Cursor, OpenCode, and
-Claude Code. Update with `npx skills@latest update groundwork`.
-
-## Use it
-
-The skill fires on its own when a task matches its triggers. To call it directly:
-
-```
-/groundwork I want an Arabic-first booking API with a Flutter app
-/groundwork add streaming to the chat endpoint
-/groundwork review this branch
-```
-
-Called with no argument, it starts the discovery interview from the first question.
-The `/groundwork` command ships with the plugin route only; on the Skills CLI route,
-ask for the skill by name instead.
-
-## Layout
+The skill entry point stays small; the depth loads only when a task needs it.
 
 ```
 skills/groundwork/
@@ -112,8 +121,22 @@ commands/groundwork.md            the /groundwork slash command
 .claude-plugin/                   plugin.json + marketplace.json
 ```
 
+## Contributing
+
+Issues and pull requests are welcome. CI runs `claude plugin validate --strict` on both manifests
+and checks every skill's frontmatter budget, so run those locally before opening a PR:
+
+```bash
+claude plugin validate .claude-plugin/marketplace.json --strict
+claude plugin validate .claude-plugin/plugin.json --strict
+```
+
 ## Notes
 
-Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving areas (LangChain middleware, Spec Kit commands, TanStack Start, MCP spec, embedding leaderboards) should be re-checked before adoption.
+Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving
+areas (LangChain middleware, Spec Kit commands, TanStack Start, MCP spec, embedding leaderboards)
+should be re-checked before adoption.
+
+## License
 
 MIT — see [LICENSE](./LICENSE).

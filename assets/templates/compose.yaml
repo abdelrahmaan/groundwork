@@ -1,0 +1,75 @@
+# Shared skeleton. Dev overrides load automatically (compose.override.yaml).
+# MVP: only `api` and `db` start by default.
+# Optional services sit behind profiles — start them with:
+#   docker compose --profile worker --profile cache --profile vector up -d
+#   docker compose --profile monitoring up -d        # prometheus + grafana
+# Move a service out of its profile once the project genuinely depends on it.
+name: <project_name>
+
+services:
+  api:
+    build: {context: ., target: prod}
+    env_file: [.env]
+    depends_on:
+      db: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health/live')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Swap for mongo if the stack guide says MongoDB — delete the one you don't use.
+  # Using pgvector instead of a separate vector store? Use image: pgvector/pgvector:pg16
+  # and enable the extension in the first migration (CREATE EXTENSION vector;).
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 10
+
+  redis:                      # cache / rate limit / queue — profile: cache
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redisdata:/data]
+    healthcheck: {test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 10}
+    profiles: ["cache", "worker"]
+
+  worker:                     # background jobs — profile: worker
+    build: {context: ., target: prod}
+    command: ["arq", "app.jobs.worker.WorkerSettings"]
+    env_file: [.env]
+    depends_on:
+      redis: {condition: service_healthy}
+    profiles: ["worker"]
+
+  qdrant:                     # vector store — profile: vector
+    image: qdrant/qdrant:v1.12.4
+    volumes: [qdrantdata:/qdrant/storage]
+    profiles: ["vector"]
+
+  prometheus:                 # metrics — profile: monitoring
+    image: prom/prometheus:v3.1.0
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./ops/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - promdata:/prometheus
+    profiles: ["monitoring"]
+
+  grafana:                    # dashboards — profile: monitoring
+    image: grafana/grafana:11.5.1
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./ops/grafana/provisioning:/etc/grafana/provisioning:ro   # datasources + dashboards as code
+      - grafanadata:/var/lib/grafana
+    depends_on: [prometheus]
+    profiles: ["monitoring"]
+
+volumes: {pgdata: {}, redisdata: {}, qdrantdata: {}, promdata: {}, grafanadata: {}}

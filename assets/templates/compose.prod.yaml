@@ -1,0 +1,22 @@
+# PROD — explicit merge:
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+# One published port = one api container. To run more, put a reverse proxy
+# (Caddy/nginx/Traefik) in front, drop `ports` here, and scale with:
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d --scale api=3
+services:
+  api:
+    restart: unless-stopped
+    ports: ["8000:8000"]
+    environment: {APP_ENV: prod}
+    deploy:
+      resources: {limits: {cpus: "1.0", memory: 1g}}
+
+  worker:
+    restart: unless-stopped
+
+  db:
+    restart: unless-stopped
+    # No published port in prod — reach it from inside the network only.
+
+  redis:
+    restart: unless-stopped

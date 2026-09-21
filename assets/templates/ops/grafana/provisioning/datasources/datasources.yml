@@ -1,0 +1,14 @@
+# Datasources as code — Grafana rebuilds identical from this file.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+  # - name: Loki          # add when you ship logs
+  #   type: loki
+  #   url: http://loki:3100
+  # - name: Tempo         # add when you ship traces
+  #   type: tempo
+  #   url: http://tempo:3200

@@ -1,0 +1,17 @@
+# Minimal scrape config — copy to <repo>/ops/prometheus.yml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["api:8000"]        # container name from compose.yaml
+
+  # Add when the service exists:
+  # - job_name: worker
+  #   static_configs: [{targets: ["worker:9100"]}]
+
+# Alerts live in rule files once you have 5–7 worth paging on:
+# rule_files: ["alerts.yml"]

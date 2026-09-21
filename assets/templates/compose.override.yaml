@@ -1,0 +1,20 @@
+# DEV — auto-loaded by `docker compose up`
+services:
+  api:
+    build: {target: dev}
+    volumes: ["./:/app"]
+    ports: ["8001:8000"]
+    environment: {APP_ENV: dev, LOG_LEVEL: DEBUG}
+  worker:
+    build: {target: dev}
+    volumes: ["./:/app"]
+  db:
+    ports: ["5432:5432"]
+  redis:
+    ports: ["6379:6379"]
+  qdrant:
+    ports: ["6333:6333"]
+  prometheus:
+    ports: ["9090:9090"]
+  grafana:
+    ports: ["3001:3000"]

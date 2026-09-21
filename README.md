@@ -23,11 +23,16 @@ copies of it.
 
 ```bash
 /plugin marketplace add abdelrahmaan/groundwork
-/plugin install groundwork@abdokamar
+/plugin install abdokamar-groundwork
 ```
 
-A managed, read-only bundle: you subscribe to it, and `/plugin update groundwork` brings new
-versions. This route also installs the `/groundwork` command.
+A managed, read-only bundle: you subscribe to it, and `/plugin update abdokamar-groundwork` brings
+new versions. This route also installs the `/groundwork` command, which is what you type day to day
+— the plugin name is only used at install time.
+
+The first command registers the catalog; the second enables the plugin from it. Both are needed.
+If another marketplace on your machine also offers a plugin by this name, disambiguate with
+`abdokamar-groundwork@abdokamar`.
 
 ### Any other agent — with the Skills CLI
 

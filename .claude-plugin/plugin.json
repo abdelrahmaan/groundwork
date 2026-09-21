@@ -1,0 +1,26 @@
+{
+  "name": "groundwork",
+  "version": "1.0.0",
+  "description": "A full-stack engineering standard for API-first, Arabic-first products: FastAPI + Pydantic v2 backends, LangChain agents and hybrid RAG, React/Next.js web, Flutter mobile, joined by one OpenAPI contract.",
+  "author": {
+    "name": "Abdo Kamar",
+    "url": "https://github.com/abdelrahmaan"
+  },
+  "homepage": "https://github.com/abdelrahmaan/groundwork",
+  "repository": "https://github.com/abdelrahmaan/groundwork",
+  "license": "MIT",
+  "keywords": [
+    "fastapi",
+    "langchain",
+    "rag",
+    "flutter",
+    "nextjs",
+    "openapi",
+    "spec-kit",
+    "arabic",
+    "rtl"
+  ],
+  "skills": [
+    "./skills/groundwork"
+  ]
+}

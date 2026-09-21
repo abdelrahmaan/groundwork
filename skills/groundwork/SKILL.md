@@ -1,6 +1,6 @@
 ---
 name: groundwork
-description: Groundwork (also called AbdoKamarKit) — a full-stack engineering standard for API-first, Arabic-first products. Python backend and AI (FastAPI, Pydantic v2, uv, LangChain create_agent, Deep Agents, hybrid RAG), React or Next.js web, Flutter mobile, joined by OpenAPI as the single contract. It interviews you about the goal, recommends a stack, writes a binding stack guide plus a Spec Kit constitution seed, then builds an MVP slice. Use whenever starting, scaffolding, planning, designing, reviewing or extending a project (backend, AI/agent/RAG, web or mobile), and alongside GitHub Spec Kit. Triggers — "new project", "scaffold", "MVP", "which stack should I use", "add an endpoint", "add a chatbot or agent or RAG", "add streaming", "build the frontend", "Flutter app", "review this code", or any mention of FastAPI, LangChain, LangGraph, agents, middleware, SSE, Qdrant, vLLM, Riverpod, TanStack, Next.js, or RTL/Arabic UI — even if this skill is not named.
+description: Use when starting, scaffolding, planning, designing, reviewing or extending an API-first or Arabic-first product — backend, AI/agent/RAG, web or mobile — and alongside GitHub Spec Kit. Triggers: "new project", "scaffold", "MVP", "which stack should I use", "add an endpoint", "add a chatbot or agent or RAG", "add streaming", "build the frontend", "Flutter app", "review this code", or any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, or RTL/Arabic UI — even if this skill is not named. Also known as AbdoKamarKit.
 ---
 
 # Groundwork
@@ -33,7 +33,7 @@ Last verified against official docs: 2026-09-20. Version floors live in each ref
 3. Every question comes with **options + a recommendation + a one-line reason**, so the answer can be "yes".
 4. Summarize back and get a yes, then write the **four kickoff outputs (§3)** — nothing more.
 
-### 1.2 Validation mode — check Abdo's answers
+### 1.2 Validation mode — check the user's answers
 ✅ agree (say why) · ⚠️ partly (name the gap + 2–3 options + a pick) · ❌ disagree (say it plainly + the risk + the better option). Never agree just to agree.
 
 ### 1.3 Teaching mode — every step builds skill

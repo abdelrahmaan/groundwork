@@ -122,7 +122,7 @@ Managed alternatives that skip the ops work: Grafana Cloud, Azure Monitor, Datad
 ## 9. Context7 & docs
 - Before writing code against any library: resolve and fetch its current docs via Context7.
 - LangChain/LangGraph/Deep Agents: prefer the official LangChain docs MCP.
-- If docs contradict this standard → docs win for *API details*; flag the conflict to Abdo and update the standard.
+- If docs contradict this standard → docs win for *API details*; flag the conflict to the user and update the standard.
 
 ## 10. Code review checklist (Claude reviews every PR against this)
 Fix-first: list blocking issues first, then suggestions, then teaching notes.

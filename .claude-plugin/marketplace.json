@@ -1,0 +1,17 @@
+{
+  "name": "abdokamar",
+  "owner": {
+    "name": "Abdo Kamar",
+    "url": "https://github.com/abdelrahmaan"
+  },
+  "description": "Abdo Kamar's engineering skills for Claude Code.",
+  "plugins": [
+    {
+      "name": "groundwork",
+      "source": "./",
+      "description": "A full-stack engineering standard for API-first, Arabic-first products: FastAPI, LangChain agents and hybrid RAG, React/Next.js, Flutter, one OpenAPI contract.",
+      "category": "engineering",
+      "keywords": ["fastapi", "langchain", "rag", "flutter", "nextjs", "openapi", "arabic"]
+    }
+  ]
+}

@@ -53,30 +53,67 @@ Details in `references/spec-kit.md`.
 
 ## Install
 
-Download `groundwork.skill` and add it to your Claude profile, or drop the folder into `.claude/skills/`.
+Pick **one** of the two routes. They install the same skill, so taking both leaves you
+with two copies of it.
+
+### Claude Code — as a plugin
+
+```bash
+/plugin marketplace add abdelrahmaan/groundwork
+/plugin install groundwork@abdokamar
+```
+
+A managed, read-only bundle: you subscribe to it and `/plugin update` brings new versions.
+This route also gives you the `/groundwork` command.
+
+### Any other agent — with the Skills CLI
+
+```bash
+npx skills@latest add abdelrahmaan/groundwork
+```
+
+Copies editable skill files into your project. Works with Codex, Cursor, OpenCode, and
+Claude Code. Update with `npx skills@latest update groundwork`.
+
+## Use it
+
+The skill fires on its own when a task matches its triggers. To call it directly:
+
+```
+/groundwork I want an Arabic-first booking API with a Flutter app
+/groundwork add streaming to the chat endpoint
+/groundwork review this branch
+```
+
+Called with no argument, it starts the discovery interview from the first question.
+The `/groundwork` command ships with the plugin route only; on the Skills CLI route,
+ask for the skill by name instead.
 
 ## Layout
 
 ```
-SKILL.md                        modes, discovery interview, kickoff outputs, MVP gate, decision register
-references/fastapi.md           app factory, lifespan, DI, versioning, DB/migrations, cache, rate limit, jobs, SSE, Locust
-references/langchain-agents.md  models, tools, middleware, context engineering, evals, MCP, Deep Agents
-references/rag-and-data.md      ingestion, Arabic embeddings, hybrid retrieval, reranking, index lifecycle
-references/security.md          auth, OWASP web + LLM, guardrails, secrets
-references/api-contract.md      OpenAPI, RFC 9457, typed SSE event schema
-references/frontend-web.md      React/Vite vs Next.js, state, streaming UI, RTL/i18n, testing, hosting
-references/mobile-flutter.md    architecture, Riverpod, dio, streaming, offline, CI/CD
-references/ops-and-review.md    Makefile, Docker dev/prod, CI, observability, load testing, review checklist
-references/repo-and-kits.md     monorepo vs polyrepo, contract distribution, starter kits
-references/code-style.md        naming conventions and readability rules per language
-references/spec-kit.md          running alongside GitHub Spec Kit
-references/frameworks.md        LangChain vs LlamaIndex vs Haystack vs Pydantic AI vs no framework
-assets/templates/               stack-guide, constitution-seed, Makefile, Dockerfile, compose, .env.example
-assets/CLAUDE.template.md       per-project CLAUDE.md
+skills/groundwork/
+  SKILL.md                        modes, discovery interview, kickoff outputs, MVP gate, decision register
+  references/fastapi.md           app factory, lifespan, DI, versioning, DB/migrations, cache, rate limit, jobs, SSE, Locust
+  references/langchain-agents.md  models, tools, middleware, context engineering, evals, MCP, Deep Agents
+  references/rag-and-data.md      ingestion, Arabic embeddings, hybrid retrieval, reranking, index lifecycle
+  references/security.md          auth, OWASP web + LLM, guardrails, secrets
+  references/api-contract.md      OpenAPI, RFC 9457, typed SSE event schema
+  references/frontend-web.md      React/Vite vs Next.js, state, streaming UI, RTL/i18n, testing, hosting
+  references/mobile-flutter.md    architecture, Riverpod, dio, streaming, offline, CI/CD
+  references/ops-and-review.md    Makefile, Docker dev/prod, CI, observability, load testing, review checklist
+  references/repo-and-kits.md     monorepo vs polyrepo, contract distribution, starter kits
+  references/code-style.md        naming conventions and readability rules per language
+  references/spec-kit.md          running alongside GitHub Spec Kit
+  references/frameworks.md        LangChain vs LlamaIndex vs Haystack vs Pydantic AI vs no framework
+  assets/templates/               stack-guide, constitution-seed, Makefile, Dockerfile, compose, .env.example
+  assets/CLAUDE.template.md       per-project CLAUDE.md
+commands/groundwork.md            the /groundwork slash command
+.claude-plugin/                   plugin.json + marketplace.json
 ```
 
 ## Notes
 
 Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving areas (LangChain middleware, Spec Kit commands, TanStack Start, MCP spec, embedding leaderboards) should be re-checked before adoption.
 
-MIT.
+MIT — see [LICENSE](./LICENSE).

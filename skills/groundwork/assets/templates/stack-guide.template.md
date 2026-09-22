@@ -22,6 +22,9 @@
 **One user story, end to end, in production shape:**
 > <e.g. "An employee asks a question in Arabic and gets an answer with source citations.">
 
+**MVP task list** (only when Spec Kit is not in use — otherwise `/speckit.tasks` owns it):
+- [ ] <task>
+
 **In scope:** <3–5 bullets>
 **Explicitly out of scope:** <the list that keeps us honest>
 
@@ -52,23 +55,22 @@
 
 ## 3b. Glossary — the names, fixed
 
-One name per concept, chosen now, used everywhere: this file, `spec.md`, `data-model.md`, the route
-paths, the tables, the code. Fill this from whatever already exists — the frontend, the product
-brief, how the client talks — **not** from what reads best in a sentence.
+One name per concept, used everywhere: spec, data model, API paths, database tables, code, and UI. Fill it
+from whatever already exists — the frontend, the product brief, how the client talks — **not** from what
+reads best in a sentence. A downstream synonym is a defect.
 
 | Concept | The one name | Do NOT use | Appears as |
 |---|---|---|---|
-| <e.g. a case or engagement> | `Project` | matter, case, engagement, workspace | `/api/v1/projects/{id}`, table `projects` |
-| <e.g. the person using it> | `User` | lawyer, member, account | |
-| | | | |
+| <a case / engagement> | `Project` | matter, case, engagement | `/api/v1/projects/{id}`, table `projects` |
+| <the person served> | `Client` | customer, account | |
+| <a generated file> | `Document` | doc, file, artifact | |
 
-**Why this section exists.** `/speckit.specify` is instructed to write for business stakeholders, so
-without this it will pick the word that reads best and call your `Project` a "Matter". That name
-then flows into `data-model.md`, into `contracts/`, into the route paths — and the mismatch is not
-discovered until the frontend calls `/projects/123` and the backend serves `/matters/123`. It costs
-one table now and a rename across every artifact later.
+Bilingual products: fix the term in both languages (`<english term> = <translated term>`), and always use the English one in code, tables, and API paths.
 
-Rule: a synonym introduced in any later document is a defect, not a style choice.
+**Why this section exists.** `/speckit.specify` writes for business stakeholders, so without this it picks
+the word that reads best and calls your `Project` a "Matter". That name flows into `data-model.md`, into
+`contracts/`, into the route paths — and the mismatch surfaces when the frontend calls `/projects/123` and
+the backend serves `/matters/123`.
 
 ## 4. Decisions
 
@@ -94,8 +96,10 @@ Rule: a synonym introduced in any later document is a defect, not a style choice
 | Languages & RTL | see §3 | |
 | Hosting | <Docker Compose / Container Apps / k8s> | |
 
-**Open questions** (decide before they block work):
+**Open questions / OPEN decisions** (decide before they block work):
 - [ ] <question> — owner, needed by <date>
+
+When an investigation settles one of these (for example Spec Kit's `research.md`), close it here in the same commit: move the answer into the table above, delete the open line, add a change-log entry, and link to where the reasoning lives.
 
 ## 5. Rules this project follows
 

@@ -84,7 +84,7 @@ Alternatives: **openapi-typescript + openapi-fetch** (types-only, zero runtime â
 ## 8. UI, accessibility, RTL & i18n
 
 - **Tailwind v4 + shadcn/ui (Radix primitives)**: accessible behavior, own-your-code components, `dir`-aware. Mantine is the batteries-included alternative.
-- **RTL rules (non-negotiable for Arabic-first):**
+- **RTL rules (required once the project's language profile includes an RTL language):**
   - Set `dir` on `<html>` from the active locale; never hardcode `ltr`.
   - Use **logical properties** everywhere: `ms-*/me-*/ps-*/pe-*`, `text-start/text-end`, `border-s/border-e`. Physical `left/right` only for things that truly don't mirror.
   - Mirror directional icons (`rtl:rotate-180` / swap chevrons), not logos or media controls.

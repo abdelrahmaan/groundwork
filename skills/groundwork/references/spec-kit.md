@@ -18,10 +18,7 @@ If you use both: **Spec Kit is the workflow, this kit is the constitution + the 
 - Optional quality gates: `/speckit.clarify` (asks up to 5 targeted questions and writes answers back into `spec.md`), `/speckit.checklist` ("unit tests for your requirements"), `/speckit.analyze` (read-only consistency check across spec/plan/tasks).
 - Two bundled extensions, installed only when needed: `specify extension add bug` (`/speckit.bug-assess → bug-fix → bug-test`, reports in `.specify/bugs/<slug>/`) and `specify extension add assess` (`intake → research → define → shape → decide`, artifacts in `.specify/assessments/<slug>/`, ending in go / needs-clarification / kill).
 - The active feature is tracked in `.specify/feature.json` (or `SPECIFY_FEATURE_DIRECTORY`) — not by the git branch.
-- Key artifacts: the constitution, `spec.md`, `plan.md`, `tasks.md`, checklists — **and the four more
-  that `/speckit.plan` also writes**: `research.md`, `data-model.md`, `contracts/`, `quickstart.md`.
-  Three of those four overlap this kit's territory. §3.1 is the rule for each; read it before
-  running `plan`, not after.
+- Key artifacts: the constitution, `spec.md`, `plan.md`, `tasks.md`, checklists — **and the four extra outputs `/speckit.plan` produces**: `research.md` (Phase 0), then `data-model.md`, `contracts/`, `quickstart.md` (Phase 1). Three of those overlap with what Groundwork already owns, so §3b below governs them.
 
 ## 3. Division of responsibility
 
@@ -47,44 +44,51 @@ Rule: never let `plan` invent a stack. The stack lives in `docs/stack-guide.md`,
 | `tasks.md` | `/speckit.tasks` (Groundwork writes the MVP list if Spec Kit isn't used) | implementation |
 | `CLAUDE.md` | Groundwork | every session |
 
-### 3.1 Every Spec Kit artifact, and what it must not do
+### 3b. Artifact map — who owns what, and the overlap rule
 
-`/speckit.plan` writes more than `plan.md`. Each of these can quietly contradict the stack guide,
-and they all did once before this section existed.
+Commands are not the interface; **artifacts are**. Every file Spec Kit produces gets one owner and one rule.
 
-| Spec Kit artifact | Overlaps | The rule |
+| Spec Kit artifact | Overlaps with | Rule |
 |---|---|---|
-| `spec.md` | the glossary | **Uses the stack guide's glossary names verbatim.** `specify` writes for business stakeholders and will otherwise invent a friendlier synonym — "Matter" for your `Project` — which survives into `data-model.md`, into the route paths, and is found on the day the frontend fails to connect. Inventing a synonym is a defect. |
-| `plan.md` | stack-guide §4 | Implements the stack guide; never re-decides it. Its Technical Context is *copied from* the stack guide, not derived afresh. |
-| `research.md` | **stack-guide §4** | The sharpest overlap: its required format is literally `Decision / Rationale / Alternatives`, so it is a second decision store. **`research.md` records the investigation; the stack guide records the decision.** It may only resolve items the stack guide marks `OPEN`, and when it does, the *same commit* closes them in the stack guide with a link. A decision that lives only in `research.md` does not exist — the constitution says the stack guide is binding, and it will still say `OPEN`. |
-| `data-model.md` | stack-guide §4 (DB), glossary | Entity names come from the glossary. Storage choices come from the stack guide. It adds fields, states and constraints — not technology. |
-| `contracts/` | `api-contract.md` | Follows this kit's error shape (RFC 9457 + stable `code` + `trace_id`), pagination shape, and typed SSE events. Do not invent a second error format. |
-| `quickstart.md` | `AGENT.md` / README | No conflict — this one is a gain. Let it hold the runnable validation gates and the measurements table. |
-| `tasks.md` | ⚠️ **collides** | Spec Kit owns it, at `specs/NNN-<name>/tasks.md`. This kit writes **no** root `tasks.md` when `.specify/` exists (SKILL.md §3). |
+| constitution | Groundwork non-negotiables + defaults | seeded from `docs/constitution-seed.md`; principles only |
+| `spec.md` | stack guide §2 (MVP slice) | behavior and user stories only; **after it exists it is the authority for scope** (see §3c) |
+| `plan.md` | stack guide §4 (decisions) | implements the stack guide, never re-decides it; its Technical Context is copied from the stack guide, not derived afresh |
+| `research.md` | stack guide §4 (decisions) | may resolve **only** items the stack guide marks OPEN; closes them there in the same commit (see §3d) |
+| `data-model.md` | stack guide §4 (DB) + glossary | uses the glossary's names; never invents synonyms |
+| `contracts/` | `references/api-contract.md` | follows Groundwork's error shape (RFC 9457 + stable `code` + `trace_id`), pagination, and SSE event contract — never a second error format |
+| `quickstart.md` | `README.md` / `CLAUDE.md` | no conflict — keep it, link it from the README |
+| `tasks.md` | ⚠️ collision | **Spec Kit owns it.** Groundwork does not write a second one (see §3e) |
+| checklists | — | Spec Kit's own quality gates |
 
-**Scope has two homes — name the winner.** The stack guide's §2 MVP slice and `spec.md`'s user
-stories are both scope definitions. §2 is the **input** to `/speckit.specify`; once `spec.md` exists
-its user stories are authoritative, and §2 is updated to match in the same commit. Skip this and
-`plan.md` will phase the work from §2 while `tasks.md` builds from the FRs, and the two will
-disagree about what is in the release.
+### 3c. Scope has one authority at a time
 
-**Before kickoff, read any constitution that already exists.** `.specify/memory/constitution.md` may
-be left over from a different product or an earlier direction. If it names another product, or
-contradicts the stack guide you are about to write, **re-ratify before `/speckit.specify`** — a
-stale constitution does not fail loudly, it fails at the `plan` gate, after the spec is written.
-Treat a principle removed or redefined as a MAJOR version bump.
+Stack guide §2 (MVP slice) is the **input** to `/speckit.specify`. Once `spec.md` exists, its user stories are the authority for scope, and stack guide §2 is updated to match **in the same commit**. If the spec's stories exceed the agreed MVP slice, that's a scope change: raise it and get a yes — don't absorb it silently.
+
+### 3d. Investigation vs decision
+
+`research.md` records the **investigation**; the stack guide records the **decision**.
+- Research may settle only what the stack guide lists as OPEN. It must not reopen or quietly override a settled decision — if it finds a settled decision is wrong, stop and raise it.
+- When research settles an open item: write the outcome into stack guide §4, remove it from the open-questions list, add a change-log line, and link back to `research.md` for the detail — all in the same commit.
+- Result: the binding file is never stale, and the reasoning isn't duplicated.
+
+### 3e. One task list
+
+If `.specify/` exists in the repo, Spec Kit owns `tasks.md` per feature. Groundwork then does **not** create a root `tasks.md`; the MVP task list lives as a section inside `docs/stack-guide.md` §2 until `/speckit.tasks` generates the real one. (These are different paths — a root `tasks.md` and `specs/<feature>/tasks.md` can never be "the same file".)
 
 ## 4. The combined workflow
 
+**Pre-flight (30 seconds, saves an hour)**
+0. If `.specify/memory/constitution.md` already exists, read it. A constitution left over from another product will silently fail the `/speckit.plan` gate, and the failure appears late. If it names a different product or contradicts the new stack guide, re-ratify it before `/speckit.specify`. Treat a principle removed or redefined as a MAJOR version bump.
+
 **Once per project**
-1. Run Discovery (SKILL.md §2) → goal, MVP slice, stack decisions.
-2. Groundwork writes the **four kickoff outputs** (SKILL.md §3): `docs/stack-guide.md` (binding), `CLAUDE.md`, `tasks.md`, `docs/constitution-seed.md`.
+1. Run Discovery (SKILL.md §2) → goal, MVP slice, stack decisions, **and the glossary** (stack guide §3b).
+2. Groundwork writes the **kickoff outputs** (SKILL.md §3): `docs/stack-guide.md` (binding), `CLAUDE.md`, `docs/constitution-seed.md` — and no root `tasks.md` when `.specify/` exists (§3e).
 3. `/speckit.constitution` — paste the seed from `docs/constitution-seed.md`. It states principles and declares the stack guide binding. Example argument:
    > "Principles: MVP-first, no file without a stated need. FastAPI + Pydantic v2 + uv; layered routers → services → repositories; typed contracts with RFC 9457 errors; OpenAPI is the single source of truth; secrets only in .env; test-first for endpoints and data; AI changes gated by evals; OWASP web + LLM controls; readable code over clever code; naming conventions per the groundwork skill."
 4. Keep the constitution short — it is the *rules*, not the reference manual. It points at this skill for detail.
 
 **Per feature**
-5. `/speckit.specify` — behavior and user stories only, no tech.
+5. `/speckit.specify` — behavior and user stories only, no tech. **It must use the glossary's names.** Inventing a friendlier synonym ("Matter" for `Project`) is a defect: it propagates into `data-model.md`, then `contracts/`, and finally into endpoints the frontend doesn't call.
 6. `/speckit.clarify` — run it whenever the spec has real ambiguity (it's the same spirit as this kit's Validation mode).
 7. `/speckit.plan` — don't retype the stack; point at the file: *"Follow docs/stack-guide.md exactly: FastAPI + Postgres/SQLAlchemy async, Qdrant hybrid + Cohere rerank, React+Vite+TanStack web, typed SSE. Do not introduce libraries outside it."*
 8. `/speckit.tasks` → `/speckit.analyze` (for anything non-trivial) → `/speckit.implement`.
@@ -95,10 +99,10 @@ Treat a principle removed or redefined as a MAJOR version bump.
 
 ## 5. Keeping the two in sync
 
-- `tasks.md`: Spec Kit generates and owns it per feature. This kit's "read tasks.md first" rule points at the same file — don't create a second one.
-- `CLAUDE.md` / `AGENTS.md`: your durable project context (decisions, commands, conventions). The constitution is the enforceable subset. Some duplication is fine; the constitution wins in `analyze`.
+- `tasks.md`: Spec Kit generates and owns it per feature, at `specs/NNN-<name>/tasks.md`. With Spec Kit, this kit's "read tasks.md first" rule means that file — never a root `tasks.md` alongside it (§3e).
+- `CLAUDE.md` / `AGENTS.md`: a short pointer to the stack guide plus commands and conventions — not a second copy of the decisions.
 - Don't restate the whole kit inside the constitution — reference it. Long constitutions get ignored by both humans and agents.
-- When a decision changes (e.g. you swap the vector store), update **`docs/stack-guide.md` first** — it is the binding record; `CLAUDE.md` links to it and follows. Then re-run `/speckit.constitution` if it's a principle-level change. (SKILL.md §3 says the same; if these two ever disagree again, the stack guide wins.)
+- **When a decision changes, the order is fixed:** `docs/stack-guide.md` first (with a change-log line) → then anything that quotes it (`CLAUDE.md`, `plan.md`) → then re-run `/speckit.constitution` only if a *principle* changed, not for a stack swap. The stack guide always wins; everything else points at it.
 
 ## 6. When NOT to use Spec Kit
 

@@ -9,7 +9,7 @@ the problem is genuinely hard and generic — **agent runtime** (tool loop, stat
 human-in-the-loop, streaming) — and costs you where the problem is specific to you — **retrieval**
 (your chunking, your hybrid fusion, your Arabic normalization, your filters).
 
-So the kit's position is split on purpose:
+So the kit's **default** is split on purpose — it's a recommendation with reasons, not a requirement. Present it as such, and adopt whatever the user chooses:
 - **Agent layer → a framework** (LangChain `create_agent` on LangGraph).
 - **Retrieval layer → your own code** against the vector store client (Qdrant / pgvector / Azure AI Search), behind a repository + factory. ~150 lines you fully understand beat a wrapper you debug through.
 
@@ -56,7 +56,7 @@ So the kit's position is split on purpose:
 **Good:** fewest moving parts, zero churn, total control. Right for agent-ladder rungs 1–4 (single call, structured output, fixed RAG chain).
 **Bad:** once you need tool loops with state, retries, interrupts, and resumable threads, you'll rebuild half of LangGraph — badly.
 
-## 3. Recommendation
+## 3. Recommendation (a default, not a verdict)
 
 | Situation | Choose |
 |---|---|
@@ -67,7 +67,7 @@ So the kit's position is split on purpose:
 | Search-centric team that values explicit pipelines and stability | Haystack |
 | Small typed service with no durability needs | Pydantic AI |
 
-**Rules**
+**Rules that follow from whichever choice is made**
 - **One agent runtime per project.** A retrieval or parsing *library* from another ecosystem is allowed if it's contained behind your repository/factory interface — two agent runtimes are not.
 - Retrieval is **your code**: hybrid query, RRF, rerank, filters, Arabic normalization. Frameworks call into it as a tool; they don't own it.
 - Pin versions, keep the framework behind factories, and never let framework types leak into your API schemas — so switching later is a contained change, not a rewrite.

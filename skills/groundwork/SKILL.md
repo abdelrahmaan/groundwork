@@ -16,9 +16,11 @@ Pairs with **GitHub Spec Kit** if you use it: Spec Kit owns the process (spec �
 
 Last verified against official docs: 2026-09-20. Version floors live in each reference file.
 
+**Works on any agent.** This is a plain Agent Skill: `SKILL.md` plus Markdown reference files. On agents that don't auto-load skills, the user names it ("use groundwork"); the agent then follows §9 and opens the reference files itself.
+
 ---
 
-## 1. Operating modes (how Claude works)
+## 1. Operating modes (how the agent works)
 
 ### 1.0 Language of work
 - **Conversation:** English by default. Switch only if the user's latest message is written in another language — then reply in that language.
@@ -30,8 +32,8 @@ Last verified against official docs: 2026-09-20. Version floors live in each ref
 ### 1.1 Kickoff mode — never code first
 1. Ask what it does: purpose, core entities, main use cases (≤ 4 focused questions).
 2. Run **Discovery (§2)**, then walk the **Decision Register (§6)** — ask only what is still open.
-3. Every question comes with **options + a recommendation + a one-line reason**, so the answer can be "yes".
-4. Summarize back and get a yes, then write the **four kickoff outputs (§3)** — nothing more.
+3. Every question comes with **options + a recommendation + a one-line reason**, so the answer can be "yes" — and the user can say no. A recommendation is never phrased as a requirement; if the user picks an alternative, adopt it fully, record it in the stack guide, and follow *its* rules (§7.4) from then on.
+4. Summarize back and get a yes, then write the **kickoff outputs (§3)** — nothing more.
 
 ### 1.2 Validation mode — check the user's answers
 ✅ agree (say why) · ⚠️ partly (name the gap + 2–3 options + a pick) · ❌ disagree (say it plainly + the risk + the better option). Never agree just to agree.
@@ -117,38 +119,27 @@ Route from the answers (details in `references/rag-and-data.md` §3):
     from it rather than inventing better ones — a synonym introduced later is a rename across every
     artifact, and with Spec Kit it is found the day the frontend fails to connect.
 
-Close discovery with a written summary: **goal, first user, success signal, MVP slice, the names,
-what's out of scope, stack answers, open questions.** Get a yes before writing code.
+Close discovery with a written summary: **goal, first user, success signal, MVP slice, the names, what's out of scope, stack answers, open questions.** Get a yes before writing code.
 
 ---
 
 ## 3. Kickoff outputs — what discovery produces
 
-Discovery ends with **three or four files and nothing else** — see the `tasks.md` condition below.
-No `app/` skeleton yet; no dependencies installed yet.
+Discovery ends with **three or four files and nothing else** — `tasks.md` is conditional. No `app/` skeleton yet; no dependencies installed yet.
 
 | File | Purpose | Template |
 |---|---|---|
 | `docs/stack-guide.md` | **Binding**: goal, MVP slice, glossary, every decision + why, the rules this project follows, deferred items and their triggers | `assets/templates/stack-guide.template.md` |
 | `CLAUDE.md` | Short session context: points at the stack guide and this skill; commands; gotchas (symlink `AGENTS.md` → it) | `assets/CLAUDE.template.md` |
-| `tasks.md` | MVP tasks in order + a "Later" list — **only when Spec Kit is not in use** | — |
+| `tasks.md` | MVP tasks in order + a "Later" list. **Skip this file if `.specify/` exists** — Spec Kit owns task lists; put the MVP list inside stack guide §2 instead (`references/spec-kit.md` §3e) | — |
 | `docs/constitution-seed.md` | The text to paste into `/speckit.constitution` if using Spec Kit | `assets/templates/constitution-seed.template.md` |
-
-> ⚠️ **`tasks.md` is conditional.** Check for `.specify/` **before** writing it.
-> If it exists, Spec Kit owns the task list and writes it to `specs/NNN-<name>/tasks.md`.
-> Writing a second one at the repo root creates two live lists with colliding ids (`T1` vs `T001`),
-> and nobody can tell which "T1" a commit means. In that case put the MVP task order in the stack
-> guide's §2 MVP slice instead, and let `/speckit.tasks` own execution order.
-> Details: `references/spec-kit.md` §3.
 
 Rules for these outputs:
 - Write them **only after the human confirms** the discovery summary.
+- The stack guide includes a **glossary** (§3b of its template): one fixed name per domain concept. Every later artifact — spec, data model, API contract, code, UI — uses those names. A synonym invented downstream is a defect, not a style choice.
 - `docs/stack-guide.md` outranks anything a later plan, task, or agent proposes. A step that contradicts it is a bug — stop and raise it instead of silently changing the stack.
 - One decision, one place: decisions live in the stack guide; `CLAUDE.md` links to it; the constitution states the *principles*, not the stack.
-- When a decision changes: update the stack guide (and its change log) **first** — it is the binding
-  record, and `CLAUDE.md` only links to it. Then re-run `/speckit.constitution` if a *principle*
-  changed. With Spec Kit, a decision reached in `research.md` is not decided until the stack guide
-  says so, in the same commit (`references/spec-kit.md` §3).
+- When a decision changes: update the stack guide (and its change log) first; re-run `/speckit.constitution` only if a principle changed. With Spec Kit, a decision reached in `research.md` is not decided until the stack guide says so, in the same commit (`references/spec-kit.md` §3d).
 - Project files (`app/`, `Makefile`, `Dockerfile`, …) get created later, one at a time, as §4's gate allows — copy them from `assets/templates/` when the need appears.
 
 **Handoff after kickoff**
@@ -192,7 +183,7 @@ Anything not triggered yet is **over-engineering**. Skip it (§4).
 
 ## 6. Decision Register (confirmed after Discovery)
 
-This is the **checklist of what must be decided**; the answers are recorded once in `docs/stack-guide.md` (§3) and nowhere else.
+This is the **checklist of what must be decided**, with the kit's recommendation in each row — a starting point for the conversation, not an assignment. The user's answers are recorded once in `docs/stack-guide.md` (§3) and nowhere else. Disagreeing with a default is a normal outcome; an unexplained default is a failure.
 
 ### 6.1 Product & backend
 | # | Decision | Default recommendation |
@@ -203,7 +194,7 @@ This is the **checklist of what must be decided**; the answers are recorded once
 | 4 | Retrieval | always hybrid (BM25 + dense, RRF) + reranker + score threshold |
 | 5 | Embeddings (ar/en) | **BGE-M3** self-hosted (best measured for Arabic, gives dense+sparse+ColBERT) · **Cohere Embed v4** or **OpenAI text-embedding-3-large** managed |
 | 6 | Reranker | **Cohere Rerank** (multilingual) or **Jina Reranker** · BGE cross-encoder self-hosted |
-| 6b | AI framework | agent layer: **LangChain `create_agent`** (LangGraph) · rungs 1–4: no framework · retrieval: **your own code** behind a factory · LlamaIndex/LlamaParse only as a contained parsing step · see `references/frameworks.md` |
+| 6b | AI framework | recommended: **LangChain `create_agent`** (LangGraph) for the agent layer, no framework for ladder rungs 1–4, retrieval as your own code behind a factory. Alternatives with their trade-offs — Pydantic AI, Haystack, LlamaIndex, DSPy — in `references/frameworks.md`; ask, don't assume |
 | 7 | LLM + serving | hosted API · **vLLM** (OpenAI-compatible `/v1` API, same factory via `base_url`) when on-prem/data residency — never exposed publicly |
 | 8 | Gateway | none → **LiteLLM Proxy** when multi-provider/budgets/on-prem routing |
 | 9 | Tracing (LLM) | pick ONE: LangSmith (default) or Langfuse (self-host) |
@@ -242,57 +233,106 @@ Record every answer in the project `CLAUDE.md` → "Decisions".
 
 ---
 
-## 7. Non-negotiables
+## 7. Foundations, defaults, and conditional rules
 
-**Engineering**
-- **MVP first**: no file, service, or dependency without a stated need (§4).
-- **Readable over clever**: small honest functions, guard clauses, names that carry meaning, comments that explain *why*. Naming conventions per stack in `references/code-style.md` — follow them consistently across Python, TypeScript, and Dart.
-- **uv** only (`pyproject.toml` + committed `uv.lock`); **Makefile** as the one entry point for every command; **Docker** dev + prod side by side.
-- Minimal code: add a module only when a decision requires it.
-- Docs-first: fetch current docs before writing library code.
-- **MVC + Factory**: routers (view) → services (controller) → repositories + schemas (model); factories build DB, vector store, embedder, reranker, LLM, retriever, agent from config.
-- Pydantic v2 at every boundary; one typed `Settings` singleton from `.env`; no scattered `os.environ`.
-- Typed API: `response_model`, status codes, documented errors, **RFC 9457** problem+json.
-- Never block the event loop in `async def`. Timeouts on every outbound call.
-- **Lifespan** for startup/shutdown — never `@app.on_event`.
-- Pin everything, including model/embedding/SDK versions.
+Three different kinds of statement live here. Don't treat them the same.
 
-**AI**
-- `init_chat_model` for models; `create_agent` / `create_deep_agent` only (never `AgentExecutor`).
-- Caps via `ModelCallLimitMiddleware` + `ToolCallLimitMiddleware` (not `max_iterations`).
-- Reliability via built-in retry / fallback / tool-error middleware.
-- **Context engineering before more agents**: curate what enters the window (dynamic prompts, summarization, context editing, offloading).
-- The LLM never writes raw SQL/Cypher/Mongo; tools are typed helpers with authz inside.
-- Grounded answers with citations; **Ragas + LLM-as-judge evals** gate every prompt/model/retrieval change.
-- One agent runtime per project; retrieval is your own code; other-ecosystem libraries only as contained parsing/utility steps (`references/frameworks.md`).
+### 7.1 Safety & facts — not negotiable
+Not opinions: security properties, deprecated APIs, and things that are simply true about the tools.
+- Secrets only in `.env` / a secret store — never in code, logs, prompts, or git. `.env.example` stays current.
+- Authorization deny-by-default, derived server-side. Never trust client-sent IDs, roles, or tenant IDs.
+- Access tokens never in `localStorage` (web) or `SharedPreferences` (mobile).
+- Model servers (vLLM, Ollama, vector stores) are never publicly exposed — private network + a proxy that forwards only the paths in use.
+- The LLM never writes or executes raw SQL/Cypher/Mongo/shell. Tools are typed helpers with authorization inside.
+- Never block the event loop inside `async def`. Every outbound call has a timeout.
+- Pin versions — libraries, models, embedders, images. Unpinned means unreproducible.
+- Apply OWASP Top 10 (web/API) and OWASP Top 10 for LLM Apps.
+- Deprecated APIs are not a style choice: if the vendor removed it, don't write it (see 7.4 for the current list).
 
-**Frontend & mobile**
-- One generated client per platform from the same spec — no hand-written API types.
-- RTL from day one: `dir` on the root + CSS logical properties (`ms-/me-/ps-/pe-`), real Arabic test content.
-- Streaming UI consumes the typed SSE event contract (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`).
-- Access tokens never in localStorage (web) / SharedPreferences (mobile).
+### 7.2 Working discipline — not negotiable
+How the work is done. Independent of stack; this is what makes the skill worth loading.
+- **MVP gate**: no file, service, or dependency without a stated need, a use this week, and nothing simpler that works (§4).
+- **Docs over memory**: fetch current library docs before writing code against a library — training data goes stale, and this is how wrong APIs get shipped.
+- **Decide once, write it down**: every technical choice lands in `docs/stack-guide.md` with its reason. A later step that contradicts it is a bug, not a preference.
+- **Test-first** for endpoints and data tasks; an AI behavior change isn't done until its eval set has run.
+- **Readable over clever**: small honest functions, guard clauses, meaningful names, comments that explain *why* (`references/code-style.md`).
+- **One contract**: clients are generated from the API schema, never hand-written; one consistent, documented error format across every client.
+- **Observable from day one**: structured logs with a request/trace ID, and a metrics endpoint. The dashboards can wait; the instrumentation can't.
+- **Docs are part of done**: `tasks.md` every task; `README.md` / `CLAUDE.md` / `.env.example` when affected.
 
-**Quality & Ops**
-- Test-first for endpoints and data tasks; evals for AI changes; **Locust** for load tests before launch.
-- Structured JSON logs + RED metrics + one LLM tracer + OTel.
-- OWASP Top 10 (web/API) + OWASP Top 10 for LLM Apps by default.
-- `tasks.md` updated every task; `README.md` / `CLAUDE.md` / `.env.example` when affected.
+### 7.3 Defaults — recommended, and changeable
+These are the kit's opinions, each with a reason and a trigger for the alternative. Offer them, explain them, take the user's answer, and record the outcome in `docs/stack-guide.md`. **Never present a default as a requirement.**
+
+| Area | Default | Why | Choose otherwise when |
+|---|---|---|---|
+| Language/runtime | Python + FastAPI | async, typed, best AI ecosystem | the team's language is elsewhere, or the service is pure CRUD in an existing stack |
+| Packaging | uv + committed lock | fast, reproducible, one tool | the team standardizes on poetry/pdm/pip-tools |
+| Task entry point | Makefile | one set of verbs in every repo | the team uses just/task/npm scripts |
+| Runtime packaging | Docker (dev + prod) | parity and one-command onboarding | a managed platform builds for you |
+| Architecture | layered: routers → services → repositories, with factories for external clients | keeps I/O at the edges and logic testable | vertical-slice or hexagonal suits the domain better |
+| Config | Pydantic `BaseSettings` singleton | typed, validated, fails fast | another config system is already in place |
+| Error format | RFC 9457 problem+json | a standard clients already understand | an existing API convention must be matched |
+| Streaming | typed SSE events (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`) | carries more than text; framework-agnostic | the frontend adopts a protocol end to end (Vercel AI SDK, LangGraph SDK) |
+| Agent layer | LangChain `create_agent` | mature runtime: middleware, checkpointing, interrupts, streaming | rungs 1–4 need no framework; Pydantic AI for small typed services; Haystack for pipeline-style RAG; LlamaIndex when its retrieval/parsing is the point (`references/frameworks.md`) |
+| Retrieval code | your own, behind a repository/factory | the hard parts (hybrid fusion, Arabic normalization, filters) are project-specific | a framework's retriever genuinely covers the case and you accept its ranking |
+| Evals | Ragas + an LLM judge with a rubric | measurable gate on prompt/model/retrieval changes | DeepEval/promptfoo fit the workflow better |
+| Load testing | Locust | Python, scriptable journeys | k6 is already in the pipeline |
+| Monitoring | Prometheus + Grafana when traffic justifies | standard, self-hostable | a managed platform (Grafana Cloud, Azure Monitor, Datadog) |
+
+The same applies to every row of the Decision Register (§6): those are recommendations with reasons, not assignments.
+
+### 7.4 Conditional rules — apply only after that choice is made
+Once a default (or an alternative) is chosen, its own rules come into force and go into the stack guide. Examples:
+
+**If FastAPI:** lifespan for startup/shutdown (`@app.on_event` is deprecated); `response_model` + status codes on every endpoint; async discipline as in `references/fastapi.md`.
+
+**If LangChain:** `init_chat_model` for models; `create_agent` / `create_deep_agent` — **never `AgentExecutor` or `initialize_agent`, which are deprecated**; caps via `ModelCallLimitMiddleware` + `ToolCallLimitMiddleware` (not `max_iterations`, which is not a `create_agent` argument); reliability via the built-in retry/fallback/tool-error middleware. Context engineering before adding agents — curate the window (dynamic prompts, summarization, context editing, offloading) before reaching for a second agent.
+
+**If the product is Arabic or any RTL language:** `dir` on the root element, CSS logical properties, real Arabic test content, normalization shared between ingestion and query, and per-language eval slices.
+
+**If there's an LLM in the product:** grounded answers with citations, "I don't know" when sources are empty, and per-user cost/token caps.
+
+**If one agent framework is chosen:** stay with one agent runtime in that project. A retrieval or parsing library from another ecosystem is fine when it's contained behind your own interface; two runtimes is not.
 
 ---
 
 ## 8. Workflow rules (every task)
 
-0. Using Spec Kit? Follow its flow and let this kit govern *how* the code is written (`references/spec-kit.md`).
+0. Using Spec Kit? Follow its flow, and read `references/spec-kit.md` §3b first — it says who owns each artifact (`research.md`, `data-model.md`, `contracts/`, `tasks.md`) and how they interact with the stack guide.
 1. Read `tasks.md`; mark the item `in_progress` (create it if missing).
 2. Teaching mode: What → Why → Alternative.
 3. Test-first for API/data tasks (red → green).
-4. Implement the minimal version following the relevant reference file and `code-style.md`. Create only files that pass the §4 gate.
+4. **Open the reference file(s) for this task (§9)**, then implement the minimal version following them, the stack guide, and `code-style.md`. Create only files that pass the §4 gate.
 5. `make fmt lint type test` (→ `make eval` when AI behavior changed).
 6. Update docs. Conventional commit (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`).
 
 ---
 
-## 9. Reference files — read the one the task needs
+## 9. Reference files — open them, don't guess
+
+**These files are instructions, not appendices. Open the file before doing the work it covers, every time — even if you think you know the answer.** They are plain Markdown next to this file; read them with whatever file-reading tool you have (`Read`, `cat`, `open`). Reading one file costs a few seconds and prevents the failure this skill exists to prevent: confidently writing a deprecated or wrong API from memory.
+
+Non-negotiable read points — do these without being asked:
+
+| Before you… | Open |
+|---|---|
+| ask the discovery questions or recommend any stack | `references/frameworks.md` (agent layer) and the relevant area file below |
+| write the first FastAPI file, a router, a lifespan, or touch DB/migrations | `references/fastapi.md` |
+| write any agent, tool, prompt, model factory, or middleware | `references/langchain-agents.md` |
+| write ingestion, chunking, embedding, retrieval, or evals | `references/rag-and-data.md` |
+| write auth, expose an endpoint publicly, or add a guardrail | `references/security.md` |
+| define request/response shapes, errors, or streaming events | `references/api-contract.md` |
+| start or change the web app | `references/frontend-web.md` |
+| start or change the Flutter app | `references/mobile-flutter.md` |
+| set up uv, Makefile, Docker, CI, monitoring, vLLM, or review a PR | `references/ops-and-review.md` |
+| name anything, or write more than a few lines of code | `references/code-style.md` |
+| decide repo layout or contract distribution | `references/repo-and-kits.md` |
+| work with GitHub Spec Kit | `references/spec-kit.md` |
+| create project files | `assets/templates/` (stack-guide, constitution-seed, Makefile, Dockerfile, compose, `.env.example`) and `assets/CLAUDE.template.md` |
+
+If a file listed here is missing, say so instead of proceeding from memory.
+
+### Full index
 
 | Task touches… | Read |
 |---|---|

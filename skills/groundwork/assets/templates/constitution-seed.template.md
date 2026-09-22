@@ -12,7 +12,7 @@ Keep it short: a constitution is the enforceable rules, not the manual. The deta
 1. MVP first — build the smallest slice that proves the goal. No file, service, or dependency
    without a stated need, a use this week, and nothing simpler that works. Deferred items and their
    triggers are listed in docs/stack-guide.md; do not pull them forward.
-2. The stack is already decided — docs/stack-guide.md is binding. Plans and tasks implement those
+2. The stack was chosen by the project owner and recorded in docs/stack-guide.md, which is binding. Plans and tasks implement those
    decisions; they never introduce a different database, framework, model, or library. If a decision
    looks wrong, stop and raise it instead of silently changing it.
 3. Layered architecture — routers stay thin, business logic lives in services, data access lives in
@@ -28,8 +28,12 @@ Keep it short: a constitution is the enforceable rules, not the manual. The deta
    why. Naming conventions follow the groundwork skill's code-style rules, consistently across Python,
    TypeScript, and Dart.
 9. Every command goes through the Makefile; make check must pass before a task is complete.
-10. Documentation is part of done — update tasks.md every task, and README/CLAUDE.md/.env.example when
-    they are affected.
+10. Documentation is part of done — update the active task list every task, and README/CLAUDE.md/.env.example
+    when they are affected.
+11. One name per concept — the glossary in docs/stack-guide.md is binding for specs, data models, API paths,
+    tables, code, and UI. Inventing a synonym downstream is a defect.
+12. Investigation vs decision — research may resolve only items the stack guide marks OPEN, and must close
+    them in the stack guide in the same commit. It never overrides a settled decision silently.
 ```
 
 ---

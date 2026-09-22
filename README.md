@@ -43,6 +43,10 @@ npx skills@latest add abdelrahmaan/groundwork
 Copies editable skill files into your project. Works with Claude Code, Codex, Cursor, OpenCode, and
 other agents that follow the Agent Skills standard. Update with `npx skills@latest update groundwork`.
 
+Two practical differences outside Claude Code: auto-triggering from the description is less reliable
+(just say "use groundwork"), and progressive disclosure varies — so the skill tells the agent
+explicitly which reference file to open before each kind of work.
+
 ## Use it
 
 The skill fires on its own when a task matches its triggers — a new project, a new endpoint, a
@@ -69,10 +73,10 @@ Discovery interview — goal, first user, success signal, constraints,
                      and a full language/data profile (content language vs question
                      language vs answer language — it decides the embedder)
   ↓  maps the goal to a stack and says the mapping out loud, then waits for your yes
-Writes four files, nothing else:
-  docs/stack-guide.md        ← binding decisions + rules + deferred items and their triggers
+Writes three or four files, nothing else:
+  docs/stack-guide.md        ← binding decisions + glossary + rules + deferred items and their triggers
   CLAUDE.md                  ← short session context, points at the stack guide
-  tasks.md                   ← MVP tasks + "Later"
+  tasks.md                   ← MVP tasks + "Later" (skipped when Spec Kit is in use — it owns tasks)
   docs/constitution-seed.md  ← paste-ready text for /speckit.constitution
   ↓
 Build the MVP slice — one user story end to end, files created one at a time as needs appear

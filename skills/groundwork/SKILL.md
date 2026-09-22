@@ -110,26 +110,45 @@ Route from the answers (details in `references/rag-and-data.md` §3):
 | "records with relations, reporting, money" | Postgres + SQLAlchemy 2.0 + Alembic |
 | "one big demo in three weeks" | MVP slice: one user story end to end, everything else deferred |
 
-Close discovery with a written summary: **goal, first user, success signal, MVP slice, what's out of scope, stack answers, open questions.** Get a yes before writing code.
+**F. The names (ask this even when it feels obvious)**
+23. What do *they* call a case or engagement — matter, project, file, case? What do they call the
+    people using it? Write the answers into the stack guide's glossary §3b, and use those words
+    everywhere afterwards. If a frontend, brief or existing system already exists, take the names
+    from it rather than inventing better ones — a synonym introduced later is a rename across every
+    artifact, and with Spec Kit it is found the day the frontend fails to connect.
+
+Close discovery with a written summary: **goal, first user, success signal, MVP slice, the names,
+what's out of scope, stack answers, open questions.** Get a yes before writing code.
 
 ---
 
 ## 3. Kickoff outputs — what discovery produces
 
-Discovery ends with **four files and nothing else**. No `app/` skeleton yet; no dependencies installed yet.
+Discovery ends with **three or four files and nothing else** — see the `tasks.md` condition below.
+No `app/` skeleton yet; no dependencies installed yet.
 
 | File | Purpose | Template |
 |---|---|---|
-| `docs/stack-guide.md` | **Binding**: goal, MVP slice, every decision + why, the rules this project follows, deferred items and their triggers | `assets/templates/stack-guide.template.md` |
+| `docs/stack-guide.md` | **Binding**: goal, MVP slice, glossary, every decision + why, the rules this project follows, deferred items and their triggers | `assets/templates/stack-guide.template.md` |
 | `CLAUDE.md` | Short session context: points at the stack guide and this skill; commands; gotchas (symlink `AGENTS.md` → it) | `assets/CLAUDE.template.md` |
-| `tasks.md` | MVP tasks in order + a "Later" list | — |
+| `tasks.md` | MVP tasks in order + a "Later" list — **only when Spec Kit is not in use** | — |
 | `docs/constitution-seed.md` | The text to paste into `/speckit.constitution` if using Spec Kit | `assets/templates/constitution-seed.template.md` |
+
+> ⚠️ **`tasks.md` is conditional.** Check for `.specify/` **before** writing it.
+> If it exists, Spec Kit owns the task list and writes it to `specs/NNN-<name>/tasks.md`.
+> Writing a second one at the repo root creates two live lists with colliding ids (`T1` vs `T001`),
+> and nobody can tell which "T1" a commit means. In that case put the MVP task order in the stack
+> guide's §2 MVP slice instead, and let `/speckit.tasks` own execution order.
+> Details: `references/spec-kit.md` §3.
 
 Rules for these outputs:
 - Write them **only after the human confirms** the discovery summary.
 - `docs/stack-guide.md` outranks anything a later plan, task, or agent proposes. A step that contradicts it is a bug — stop and raise it instead of silently changing the stack.
 - One decision, one place: decisions live in the stack guide; `CLAUDE.md` links to it; the constitution states the *principles*, not the stack.
-- When a decision changes: update the stack guide (and its change log) first; re-run `/speckit.constitution` only if a principle changed.
+- When a decision changes: update the stack guide (and its change log) **first** — it is the binding
+  record, and `CLAUDE.md` only links to it. Then re-run `/speckit.constitution` if a *principle*
+  changed. With Spec Kit, a decision reached in `research.md` is not decided until the stack guide
+  says so, in the same commit (`references/spec-kit.md` §3).
 - Project files (`app/`, `Makefile`, `Dockerfile`, …) get created later, one at a time, as §4's gate allows — copy them from `assets/templates/` when the need appears.
 
 **Handoff after kickoff**

@@ -50,6 +50,26 @@
 
 **Implications taken from this profile:** <embedder, normalization, parsing, eval slices, RTL>
 
+## 3b. Glossary — the names, fixed
+
+One name per concept, chosen now, used everywhere: this file, `spec.md`, `data-model.md`, the route
+paths, the tables, the code. Fill this from whatever already exists — the frontend, the product
+brief, how the client talks — **not** from what reads best in a sentence.
+
+| Concept | The one name | Do NOT use | Appears as |
+|---|---|---|---|
+| <e.g. a case or engagement> | `Project` | matter, case, engagement, workspace | `/api/v1/projects/{id}`, table `projects` |
+| <e.g. the person using it> | `User` | lawyer, member, account | |
+| | | | |
+
+**Why this section exists.** `/speckit.specify` is instructed to write for business stakeholders, so
+without this it will pick the word that reads best and call your `Project` a "Matter". That name
+then flows into `data-model.md`, into `contracts/`, into the route paths — and the mismatch is not
+discovered until the frontend calls `/projects/123` and the backend serves `/matters/123`. It costs
+one table now and a rename across every artifact later.
+
+Rule: a synonym introduced in any later document is a defect, not a style choice.
+
 ## 4. Decisions
 
 | Area | Choice | Why (one line) |

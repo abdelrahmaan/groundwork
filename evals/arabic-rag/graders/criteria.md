@@ -3,16 +3,18 @@ type: llm
 weight: 1
 ---
 
-This is a retrieval problem where the language profile drives the decisions.
+Judge whether the response applies THIS standard's retrieval rules. A capable
+assistant without the standard will propose chunking, embeddings and a vector
+store, and may say "hybrid search"; that alone is not a pass.
 
 Passing requires ALL of:
-- It treats content language, question language, and answer language as
-  separate things, and uses them to choose the embedding model — rather than
-  reaching for a default English embedder.
-- It proposes hybrid retrieval rather than dense-only: lexical plus dense,
-  fused, then reranked.
-- It names Arabic-specific handling in ingestion or normalization.
-- It does not silently assume an English-first pipeline.
+- It separates content language, question language, and answer language, and
+  uses that profile to choose the embedding model — not a single "it's Arabic".
+- It names a specific multilingual embedder suited to Arabic (for example
+  BAAI/bge-m3) rather than defaulting to an English-first or OpenAI embedder.
+- It specifies hybrid retrieval with a NAMED fusion step — lexical (BM25) plus
+  dense, fused with RRF — followed by a reranker as a distinct stage.
+- It addresses Arabic-specific text normalization during ingestion.
 
-Fail if the answer is a generic "chunk it, embed it with OpenAI, store in a
-vector DB" with no Arabic-specific reasoning.
+Fail if fusion is vague ("combine the results"). Fail if the reranker is absent
+or folded into retrieval. Fail if the embedder is unnamed or English-first.

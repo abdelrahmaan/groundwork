@@ -3,17 +3,18 @@ type: llm
 weight: 1
 ---
 
-This is an extension of an existing service, not a new project.
+Judge whether the response applies THIS standard's API contract rules to an
+existing service. A capable assistant without the standard will suggest SSE;
+that alone is not a pass.
 
 Passing requires ALL of:
-- It does NOT run a full new-project discovery interview. Asking one or two
-  targeted questions about the existing service is fine and expected.
-- It answers in terms of streaming specifics: SSE with a typed event schema,
-  rather than a vague "use websockets or SSE".
-- It reflects the standard's API contract rules — typed SSE events, and errors
-  in RFC 9457 problem-details form.
-- If a stack guide could exist in the repo, it says those decisions take
-  precedence over its own defaults.
+- It says that `docs/stack-guide.md` in the repo, if present, is binding and
+  overrides its own defaults.
+- It specifies a TYPED SSE event schema — named event types carrying defined
+  fields — rather than "stream tokens over SSE".
+- It specifies the error format as RFC 9457 problem details.
+- It does NOT run a full new-project discovery interview; targeted questions
+  about the existing service are fine.
 
-Fail if it starts a discovery interview from scratch, or if it proposes a
-streaming design with no event schema.
+Fail if SSE is proposed with no event schema. Fail if the error format is
+unspecified or is an ad-hoc JSON shape. Fail if it opens a kickoff interview.

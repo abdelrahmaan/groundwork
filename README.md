@@ -7,6 +7,12 @@ a production standard.
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757.svg)](#claude-code--as-a-plugin)
 
+<p align="center">
+  <img src="docs/terminal-demo.gif" alt="Groundwork in a terminal: it asks what language the documents are in, maps the answer to BGE-M3 plus Arabic normalization and an RTL UI, then writes the four kickoff files" width="960">
+  <br>
+  <sub>The interview is shortened to one question here. The real one asks in batches of 2–3.</sub>
+</p>
+
 Built for **API-first, Arabic-first products**:
 
 - **Backend + AI — Python**: FastAPI, Pydantic v2, uv, Docker, SQLAlchemy 2.0/Alembic (or SQLModel / MongoDB + Motor), Redis, ARQ/Celery, LangChain `create_agent` / Deep Agents, hybrid RAG (BM25 + dense + RRF + rerank) over Qdrant, pgvector/Supabase, or Azure AI Search, with Prometheus + Grafana when traffic justifies it.

@@ -1,6 +1,6 @@
 # LangChain Agents Standard
 
-Version floors: `langchain` ≥ 1.3 (event streaming; `ToolErrorMiddleware` needs ≥ 1.3.14), `deepagents` ≥ 0.7 (planning is opt-in).
+Version floors: `langchain` ≥ 1.3 (event streaming — it requires `langgraph` ≥ 1.2.0, the first release with `version="v3"`; `ToolErrorMiddleware` needs ≥ 1.3.14), `deepagents` ≥ 0.7 (planning is opt-in).
 Implementation: fetch current docs via the LangChain docs MCP or Context7 — these APIs change monthly.
 
 ## Contents
@@ -74,11 +74,11 @@ Pick the **lowest rung** that solves the problem (each rung adds latency, cost, 
 - `response_format=MySchema` → auto-picks `ProviderStrategy` (native) when supported, else `ToolStrategy`.
 - JSON-schema dicts: the docs say to wrap them in `ProviderStrategy`/`ToolStrategy`, but `langchain` 1.4.2 also accepts a raw dict and wraps it in `AutoStrategy` itself (tested 2026-09-24; `factory.py`). Wrap explicitly anyway — it works on both, and it states the strategy you meant.
 - Use structured output at every boundary where code (not a human) consumes the result.
-- **Structured output is not a readable text stream.** Tested 2026-09-24 with the real `ChatOpenAI` client (Chat Completions API, mocked HTTP) on `langchain` 1.4.2, `langchain-core` 1.6.4, `langchain-openai` 1.6.6:
+- **Structured output is not a readable text stream.** Tested 2026-09-24 with the real `ChatOpenAI` client (Chat Completions and Responses APIs, mocked HTTP) on `langchain` 1.4.2, `langchain-core` 1.6.4, `langchain-openai` 1.6.6:
   - `create_agent(response_format=MySchema)` picks `ProviderStrategy` for OpenAI, and the JSON then streams as the **AI message's text** (`'{"answer":'`, `' "Paris is'`, …). A loop that forwards every text chunk as a `token` sends raw JSON to the user.
   - `ToolStrategy(MySchema)` streams it as **tool-call argument fragments** instead, and also emits a `ToolMessage` ("Returning structured response: …") that is tagged `langgraph_node == "model"`.
   - Either way, the validated object only exists at the end, in `state["structured_response"]`.
-  - `model.with_structured_output(PydanticModel)` yields **once**, at the end — with both `method="json_schema"` and `"function_calling"`. With a dict schema it yields **cumulative** partial dicts (`'Paris is'`, `'Paris is the capit'`, …), so appending them duplicates text; send `new[len(prev):]` if you must.
+  - `model.with_structured_output(PydanticModel)` yields **once**, at the end — with `method="json_schema"` and `"function_calling"`, and on the Responses API (`use_responses_api=True`) too. With a dict schema it yields **cumulative** partial dicts (`'Paris is'`, `'Paris is the capit'`, …), so appending them duplicates text; send `new[len(prev):]` if you must.
   - So don't put a human-facing answer inside a schema just to stream it. Stream the answer as text (§10) and keep the schema for what code consumes. A UI can still render a schema progressively from partial data, field by field, once the required fields exist.
 
 ## 7. Middleware — built-in (provider-agnostic)
@@ -137,7 +137,7 @@ Verify the exact composition semantics in the docs when combining retry + fallba
 
 ## 10. Streaming
 
-- **Event streaming** — `agent.astream_events(..., version="v3")` — is what the docs recommend for apps and frontends. It gives typed projections: `stream.messages` (each has `.text` deltas, `.reasoning`, `.tool_calls` argument chunks, `.output` = the final `AIMessage`), `stream.tool_calls` (execution lifecycle), `stream.values`/`stream.output` (state), and `stream.extensions` (your own transformers).
+- **Event streaming** — `agent.astream_events(..., version="v3")` — is what the docs recommend for apps and frontends. It gives typed projections: `stream.messages` (each has `.text` deltas, `.reasoning`, `.tool_calls` argument chunks, `.output` = the final `AIMessage`), `stream.tool_calls` (execution lifecycle), `stream.values`/`stream.output` (state), and `stream.extensions` (your own transformers). Async differs from sync: `await message.output` and `await stream.output()` — on the async stream `output` is a method, on the sync one a property (`langgraph/stream/run_stream.py`).
   - ⚠️ **Experimental.** In `langgraph` 1.2.12 (latest on 2026-09-24) it's decorated `@beta` and warns "experimental and may change". Pin the version, and re-check before upgrading.
   - **`custom` events are off by default in v3.** Anything written with `get_stream_writer()` is dropped unless a registered `StreamTransformer` declares `required_stream_modes = ("custom",)`. Push it into a named `StreamChannel("sources")` and it shows up as `custom:sources` events. Verified: the probe got no custom events without a transformer, and got them with one.
 - **Stable alternative:** `astream(stream_mode=["messages", "custom"], version="v2")`, which yields a unified `StreamPart {type, ns, data}`. `"custom"` gives whatever tools wrote with `get_stream_writer()`, and `"updates"`/`"values"` give steps and state. `"messages"` gives `(chunk, metadata)` pairs: forward a chunk as a token only if it is an `AIMessageChunk` **and** `metadata["langgraph_node"] == "model"`. The node check alone lets `ToolStrategy`'s `ToolMessage` through (tested). Choose this when a beta API is not acceptable.

@@ -8,9 +8,9 @@ a production standard.
 [![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757.svg)](#claude-code--as-a-plugin)
 
 <p align="center">
-  <img src="docs/terminal-demo.gif" alt="Groundwork in a terminal: it asks what language the documents are in, maps the answer to BGE-M3 plus Arabic normalization and an RTL UI, then writes the four kickoff files" width="960">
+  <img src="docs/technical-demo.gif" alt="Groundwork end to end: the interview asks the goal and the data's language, recommends BGE-M3 with its reason, writes a binding stack guide, ships one user story with make check and typed stream events, then hands off to Spec Kit" width="960">
   <br>
-  <sub>The interview is shortened to one question here. The real one asks in batches of 2–3.</sub>
+  <sub>60 seconds, end to end: interview → output files → shipped MVP slice → Spec Kit handoff. Shortened interview, example project.</sub>
 </p>
 
 Built for **API-first, Arabic-first products**:

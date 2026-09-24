@@ -1,6 +1,8 @@
 # Constitution seed — <project_name>
 
 Paste the block below as the argument to `/speckit.constitution` (Copilot skills mode: `/speckit-constitution`).
+Other spec workflows: the same principles go in their rules slot — OpenSpec's `openspec/config.yaml`
+`context`, Superpowers' `CLAUDE.md` — one line each (groundwork `references/spec-workflows.md`).
 Keep it short: a constitution is the enforceable rules, not the manual. The detail stays in
 `docs/stack-guide.md` and the **groundwork** skill.
 

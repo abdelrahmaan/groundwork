@@ -1,7 +1,8 @@
 # Stack Guide — <project_name>
 
 > **This file is binding.** It records the decisions made in the kickoff interview and the rules
-> every later step follows — including `/speckit.plan`, `/speckit.tasks` and `/speckit.implement`.
+> every later step follows — including a spec workflow's plan, tasks and implementation (Spec Kit,
+> OpenSpec, Superpowers or another).
 > Anything that contradicts this file is a bug, not a preference.
 > Detail lives in the **groundwork** skill; this file records *what we chose for this project*.
 >
@@ -22,7 +23,7 @@
 **One user story, end to end, in production shape:**
 > <e.g. "An employee asks a question in Arabic and gets an answer with source citations.">
 
-**MVP task list** (only when Spec Kit is not in use — otherwise `/speckit.tasks` owns it):
+**MVP task list** (only when no spec workflow is in use — otherwise its task list owns it):
 - [ ] <task>
 
 **In scope:** <3–5 bullets>
@@ -67,7 +68,7 @@ reads best in a sentence. A downstream synonym is a defect.
 
 Bilingual products: fix the term in both languages (`<english term> = <translated term>`), and always use the English one in code, tables, and API paths.
 
-**Why this section exists.** `/speckit.specify` writes for business stakeholders, so without this it picks
+**Why this section exists.** A spec writer (`/speckit.specify`, `/opsx:propose`, `brainstorming`) writes for business stakeholders, so without this it picks
 the word that reads best and calls your `Project` a "Matter". That name flows into `data-model.md`, into
 `contracts/`, into the route paths — and the mismatch surfaces when the frontend calls `/projects/123` and
 the backend serves `/matters/123`.
@@ -99,7 +100,7 @@ the backend serves `/matters/123`.
 **Open questions / OPEN decisions** (decide before they block work):
 - [ ] <question> — owner, needed by <date>
 
-When an investigation settles one of these (for example Spec Kit's `research.md`), close it here in the same commit: move the answer into the table above, delete the open line, add a change-log entry, and link to where the reasoning lives.
+When an investigation settles one of these (for example Spec Kit's `research.md` or OpenSpec's `design.md`), close it here in the same commit: move the answer into the table above, delete the open line, add a change-log entry, and link to where the reasoning lives.
 
 ## 5. Rules this project follows
 

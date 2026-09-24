@@ -38,12 +38,12 @@ make gen-clients    # regenerate TS + Dart clients from openapi.json
 - Streaming: typed SSE events (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`).
 
 ## Rules for Claude here
-1. Read `tasks.md` first; mark the item in progress.
+1. Read the active task list first — `tasks.md`, or the spec workflow's own (`specs/NNN-*/tasks.md`, `openspec/changes/<change>/tasks.md`, `docs/superpowers/plans/*.md`); mark the item in progress.
 2. Fetch current library docs (Context7 / docs MCP) before writing library code.
 3. Teaching mode: What → Why → Alternative → minimal code.
 4. Validate my answers: agree / partly / disagree, with options + a recommendation.
 5. Test-first for endpoints and data; `make eval` when AI behavior changes.
-6. Update `tasks.md` (+ README / CLAUDE.md / .env.example) after every task.
+6. Update the active task list (+ README / CLAUDE.md / .env.example) after every task.
 
 ## Gotchas
 - <add as discovered>

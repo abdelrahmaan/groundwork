@@ -8,9 +8,9 @@ a production standard.
 [![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757.svg)](#claude-code--as-a-plugin)
 
 <p align="center">
-  <img src="docs/technical-demo-short.gif" alt="Groundwork's interview asks the goal and the data's language before any stack, recommends BGE-M3 with its reason, then writes a binding stack guide whose sections are shown" width="960">
+  <img src="docs/technical-demo.gif" alt="Groundwork end to end: the interview asks the goal and the data's language, recommends BGE-M3 with its reason, writes a binding stack guide, ships one user story with make check and typed stream events, then hands off to Spec Kit" width="960">
   <br>
-  <sub>Shortened interview, example project. Full 60-second walkthrough, from interview to output files, shipped MVP slice and the Spec Kit handoff: <a href="docs/technical-demo.mp4">docs/technical-demo.mp4</a></sub>
+  <sub>60 seconds, end to end: interview → output files → shipped MVP slice → Spec Kit handoff. Shortened interview, example project.</sub>
 </p>
 
 Built for **API-first, Arabic-first products**:

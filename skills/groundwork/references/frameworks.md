@@ -23,7 +23,7 @@ So the kit's **default** is split on purpose — it's a recommendation with reas
 - Largest ecosystem, best AI-assistant coverage, LangSmith integration.
 
 **Bad — don't pretend otherwise**
-- **Churn.** APIs move fast: `max_iterations` gave way to call-limit middleware, streaming moved to `stream_events(version="v3")`, error middleware needs a specific minor version. Pin versions and read the docs every time.
+- **Churn.** APIs move fast: `max_iterations` gave way to call-limit middleware, streaming gained `stream_events(version="v3")` (still `@beta` in `langgraph` 1.2.12, with v2 as the stable path), error middleware needs a specific minor version. Pin versions and read the docs every time.
 - Abstraction depth: when something breaks, the stack trace goes through several layers you didn't write.
 - Its retrieval/document-loader layer is broad but shallow; for serious RAG you'll own that part anyway.
 - Docs and examples on the internet are full of the pre-v1 API — a trap for both humans and coding agents.

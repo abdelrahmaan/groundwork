@@ -71,8 +71,23 @@ Notes: multilingual models generally beat Arabic-specific encoders for retrieval
 - Metadata filters for tenant, ACL, doc type, date — applied **in the vector query**, not after.
 - Query rewriting / multi-query only if evals show it helps.
 - Retrieval `k` capped (cost + context).
-- Return citations (source ID, page) with every grounded answer.
+- Return citations (source ID, page) with every grounded answer — see §4b for how, while streaming.
 - "No relevant results" → say so; never answer from prior knowledge in grounded mode.
+
+## 4b. Citations in a streamed answer
+
+The sources are known **before** generation starts, so citations don't need structured output (which doesn't stream as text — `langchain-agents.md` §6).
+
+1. **Number the retrieved chunks** in the context: `[1] …`, `[2] …`. Tell the model to cite each claim with its marker, and to say it doesn't know when the sources don't cover the question.
+2. **Publish the sources as soon as retrieval finishes.** With an agent, the retrieval tool calls `get_stream_writer()` (in v3, register a transformer — `langchain-agents.md` §10). With a fixed chain, just send them before calling the model. The UI can show the source panel while the answer is still streaming.
+3. **Stream the answer as plain text** (`token` events). The `[n]` markers arrive inline.
+4. **Resolve at the end, on the server.**
+   - If the provider returned native citations, use them. They come back as `Citation` annotations on the final message's text blocks, read from `message.output` / `content_blocks`, with fields `url`, `title`, `cited_text`, `start_index`, `end_index`. In `langchain-core` 1.6.4 they're translated for Anthropic (document, search-result and web-search citations), OpenAI (`url_citation`, `file_citation`) and Bedrock Converse — tested on 2026-09-24: Anthropic search-result, and OpenAI `url_citation` both on a built message and **through a streamed Responses API call** (the annotation survives aggregation); the rest read from `block_translators/`. A plain-text model returns no annotations (tested), which is why markers are the default.
+   - Otherwise, parse the `[n]` markers, keep only those in `1..len(sources)`, and drop any the model invented.
+   - Send one `citation` event per cited source, then `done` with `answered` set.
+5. **Grounded mode:** if retrieval returns nothing above the threshold, skip the model call and send `done` with `answered: false`.
+
+Evals check citation correctness: every marker points at a chunk that supports the claim (§6).
 
 ## 5. Index lifecycle
 - **Versioned collections + alias**: re-embed into `docs_v2`, validate with evals, switch alias; old version kept for rollback.

@@ -272,7 +272,7 @@ These are the kit's opinions, each with a reason and a trigger for the alternati
 | Architecture | layered: routers → services → repositories, with factories for external clients | keeps I/O at the edges and logic testable | vertical-slice or hexagonal suits the domain better |
 | Config | Pydantic `BaseSettings` singleton | typed, validated, fails fast | another config system is already in place |
 | Error format | RFC 9457 problem+json | a standard clients already understand | an existing API convention must be matched |
-| Streaming | typed SSE events (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`) | carries more than text; framework-agnostic | the frontend adopts a protocol end to end (Vercel AI SDK, LangGraph SDK) |
+| Streaming | typed SSE events (`token`, `tool_call`, `sources`, `citation`, `interrupt`, `error`, `done`) | carries more than text; framework-agnostic | the frontend adopts a protocol end to end (Vercel AI SDK, LangGraph SDK) |
 | Agent layer | LangChain `create_agent` | mature runtime: middleware, checkpointing, interrupts, streaming | rungs 1–4 need no framework; Pydantic AI for small typed services; Haystack for pipeline-style RAG; LlamaIndex when its retrieval/parsing is the point (`references/frameworks.md`) |
 | Retrieval code | your own, behind a repository/factory | the hard parts (hybrid fusion, Arabic normalization, filters) are project-specific | a framework's retriever genuinely covers the case and you accept its ranking |
 | Evals | Ragas + an LLM judge with a rubric | measurable gate on prompt/model/retrieval changes | DeepEval/promptfoo fit the workflow better |

@@ -42,13 +42,15 @@ event: run_started   data: {"run_id": "...", "thread_id": "..."}
 event: token         data: {"delta": "Once"}
 event: tool_call     data: {"id": "...", "name": "search_docs", "status": "started"}
 event: tool_result   data: {"id": "...", "status": "ok", "summary": "5 docs"}
-event: citation      data: {"source_id": "...", "title": "...", "page": 3}
+event: sources       data: {"sources": [{"marker": 1, "source_id": "...", "title": "...", "page": 3}]}
+event: citation      data: {"marker": 1, "source_id": "...", "title": "...", "page": 3, "url": null, "cited_text": null}
 event: interrupt     data: {"type": "approval_required", "tool": "send_email", "args": {...}}
 event: error         data: {"code": "rate_limited", "detail": "...", "trace_id": "..."}
-event: done          data: {"finish_reason": "stop", "usage": {...}, "trace_id": "..."}
+event: done          data: {"finish_reason": "stop", "answered": true, "usage": {...}, "trace_id": "..."}
 ```
 Rules:
 - Every stream ends with exactly one `done` or `error` — never a silent close.
+- Grounded answers: `sources` as soon as retrieval finishes, then `token`s (with inline `[n]` markers), then one `citation` per source actually cited, then `done`. `marker` links the `[n]` in the text to its source. `url` and `cited_text` are filled when the provider returned native citations (LangChain `Citation` blocks), otherwise null. Details: `rag-and-data.md` §4b.
 - Event IDs increase monotonically (enables `Last-Event-ID` resume).
 - Keep-alive pings every ~15s (built into FastAPI SSE); no GZip on SSE routes.
 - `interrupt` events drive human-in-the-loop UI; the approval is a separate POST that resumes the thread.

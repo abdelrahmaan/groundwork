@@ -1,6 +1,6 @@
 ---
 name: groundwork
-description: Use when any task touches an API-first or Arabic-first product — starting one, or working inside one that already exists. Single tasks count — "add an endpoint", "add streaming", "add a chatbot or agent or RAG", "build the frontend", "review this code", "which stack should I use", "new project", "scaffold", "MVP". Also any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, RTL/Arabic UI, or GitHub Spec Kit — even if this skill is not named, and even when the request looks answerable without it.
+description: Use when any task touches an API-first or Arabic-first product — starting one, or working inside one that already exists. Single tasks count — "add an endpoint", "add streaming", "add a chatbot or agent or RAG", "build the frontend", "review this code", "which stack should I use", "new project", "scaffold", "MVP". Also any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, RTL/Arabic UI, or a spec workflow (GitHub Spec Kit, OpenSpec, Superpowers) — even if this skill is not named, and even when the request looks answerable without it.
 ---
 
 # Groundwork
@@ -12,7 +12,7 @@ Two rules govern everything below:
 - **MVP first.** Build the smallest thing that proves the goal. Nothing exists until a stated need asks for it.
 - **Docs, not memory.** Library details come from current official docs (Context7 / the framework's docs MCP).
 
-Pairs with **GitHub Spec Kit** if you use it: Spec Kit owns the process (spec → plan → tasks → implement → converge), this kit owns the engineering standard. See `references/spec-kit.md`.
+Pairs with **any spec workflow** — GitHub Spec Kit, OpenSpec, Superpowers, or another: the workflow owns the process (spec → plan → tasks → implement → review), this kit owns the engineering standard. See `references/spec-workflows.md`.
 
 Last verified against official docs: 2026-09-20. Version floors live in each reference file.
 
@@ -117,9 +117,14 @@ Route from the answers (details in `references/rag-and-data.md` §3):
     people using it? Write the answers into the stack guide's glossary §3b, and use those words
     everywhere afterwards. If a frontend, brief or existing system already exists, take the names
     from it rather than inventing better ones — a synonym introduced later is a rename across every
-    artifact, and with Spec Kit it is found the day the frontend fails to connect.
+    artifact, and with a spec workflow it is found the day the frontend fails to connect.
 
-Close discovery with a written summary: **goal, first user, success signal, MVP slice, the names, what's out of scope, stack answers, open questions.** Get a yes before writing code.
+**G. How the work is run**
+24. Which spec workflow runs the work — Spec Kit, OpenSpec, Superpowers, another, or none? Recommend
+    the one already installed; none for a spike or a one-story MVP (`references/spec-workflows.md` §2, §7).
+    The answer decides whether a root `tasks.md` is written and where the constitution seed goes.
+
+Close discovery with a written summary: **goal, first user, success signal, MVP slice, the names, what's out of scope, stack answers, spec workflow, open questions.** Get a yes before writing code.
 
 ---
 
@@ -131,20 +136,23 @@ Discovery ends with **three or four files and nothing else** — `tasks.md` is c
 |---|---|---|
 | `docs/stack-guide.md` | **Binding**: goal, MVP slice, glossary, every decision + why, the rules this project follows, deferred items and their triggers | `assets/templates/stack-guide.template.md` |
 | `CLAUDE.md` | Short session context: points at the stack guide and this skill; commands; gotchas (symlink `AGENTS.md` → it) | `assets/CLAUDE.template.md` |
-| `tasks.md` | MVP tasks in order + a "Later" list. **Skip this file if `.specify/` exists** — Spec Kit owns task lists; put the MVP list inside stack guide §2 instead (`references/spec-kit.md` §3e) | — |
-| `docs/constitution-seed.md` | The text to paste into `/speckit.constitution` if using Spec Kit | `assets/templates/constitution-seed.template.md` |
+| `tasks.md` | MVP tasks in order + a "Later" list. **Skip this file when a spec workflow is in use** (question 24, or `.specify/` / `openspec/` / `docs/superpowers/` exists) — it owns task lists; put the MVP list inside stack guide §2 instead (`references/spec-workflows.md` §2) | — |
+| `docs/constitution-seed.md` | The project's principles, for the spec workflow's rules slot: pasted into `/speckit.constitution`, summarized into `openspec/config.yaml`, or pointed at from `CLAUDE.md` (`references/spec-workflows.md`) | `assets/templates/constitution-seed.template.md` |
 
 Rules for these outputs:
 - Write them **only after the human confirms** the discovery summary.
 - The stack guide includes a **glossary** (§3b of its template): one fixed name per domain concept. Every later artifact — spec, data model, API contract, code, UI — uses those names. A synonym invented downstream is a defect, not a style choice.
 - `docs/stack-guide.md` outranks anything a later plan, task, or agent proposes. A step that contradicts it is a bug — stop and raise it instead of silently changing the stack.
 - One decision, one place: decisions live in the stack guide; `CLAUDE.md` links to it; the constitution states the *principles*, not the stack.
-- When a decision changes: update the stack guide (and its change log) first; re-run `/speckit.constitution` only if a principle changed. With Spec Kit, a decision reached in `research.md` is not decided until the stack guide says so, in the same commit (`references/spec-kit.md` §3d).
+- When a decision changes: update the stack guide (and its change log) first; update the workflow's rules slot only if a principle changed. A decision reached in a workflow's research or design file is not decided until the stack guide says so, in the same commit (`references/spec-kit.md` §3d).
 - Project files (`app/`, `Makefile`, `Dockerfile`, …) get created later, one at a time, as §4's gate allows — copy them from `assets/templates/` when the need appears.
 
 **Handoff after kickoff**
 - With Spec Kit: `/speckit.constitution` (paste the seed) → `/speckit.specify` → `/speckit.clarify` → `/speckit.plan` (argument: "follow docs/stack-guide.md exactly") → `/speckit.tasks` → `/speckit.implement` → `/speckit.converge`. See `references/spec-kit.md`.
-- Without Spec Kit: work straight from `tasks.md`, this skill governing how each file is written.
+- With OpenSpec: write `openspec/config.yaml` `context`/`rules` from the seed → `/opsx:propose` → `/opsx:apply` → review → `/opsx:archive`. See `references/spec-workflows.md` §4.
+- With Superpowers: `CLAUDE.md` is the rules slot → `brainstorming` (per feature; approaches stay inside the stack guide) → `writing-plans` (stack guide in Global Constraints) → `subagent-driven-development`. See `references/spec-workflows.md` §3.
+- Another workflow: `references/spec-workflows.md` §6.
+- Without one: work straight from `tasks.md`, this skill governing how each file is written.
 
 ---
 
@@ -298,8 +306,8 @@ Once a default (or an alternative) is chosen, its own rules come into force and 
 
 ## 8. Workflow rules (every task)
 
-0. Using Spec Kit? Follow its flow, and read `references/spec-kit.md` §3b first — it says who owns each artifact (`research.md`, `data-model.md`, `contracts/`, `tasks.md`) and how they interact with the stack guide.
-1. Read `tasks.md`; mark the item `in_progress` (create it if missing).
+0. Using a spec workflow? Follow its flow, and read `references/spec-workflows.md` first (plus `references/spec-kit.md` §3b for Spec Kit) — it says which slot each artifact fills and how it defers to the stack guide.
+1. Read the active task list — root `tasks.md`, or the workflow's own (`references/spec-workflows.md` §2); mark the item `in_progress` (create a root `tasks.md` only when no workflow is in use).
 2. Teaching mode: What → Why → Alternative.
 3. Test-first for API/data tasks (red → green).
 4. **Open the reference file(s) for this task (§9)**, then implement the minimal version following them, the stack guide, and `code-style.md`. Create only files that pass the §4 gate.
@@ -327,7 +335,7 @@ Non-negotiable read points — do these without being asked:
 | set up uv, Makefile, Docker, CI, monitoring, vLLM, or review a PR | `references/ops-and-review.md` |
 | name anything, or write more than a few lines of code | `references/code-style.md` |
 | decide repo layout or contract distribution | `references/repo-and-kits.md` |
-| work with GitHub Spec Kit | `references/spec-kit.md` |
+| work with a spec workflow (Spec Kit, OpenSpec, Superpowers, other) | `references/spec-workflows.md` (+ `references/spec-kit.md` for Spec Kit) |
 | create project files | `assets/templates/` (stack-guide, constitution-seed, Makefile, Dockerfile, compose, `.env.example`) and `assets/CLAUDE.template.md` |
 
 If a file listed here is missing, say so instead of proceeding from memory.
@@ -347,6 +355,7 @@ If a file listed here is missing, say so instead of proceeding from memory.
 | Monorepo vs polyrepo, starter kits to borrow from, shared conventions | `references/repo-and-kits.md` |
 | Naming conventions, readability rules, review smells | `references/code-style.md` |
 | LangChain vs LlamaIndex vs Haystack vs Pydantic AI vs no framework | `references/frameworks.md` |
+| Working alongside a spec workflow: detection, rules slot, who owns tasks | `references/spec-workflows.md` |
 | Working alongside GitHub Spec Kit (constitution, spec, plan, tasks, converge) | `references/spec-kit.md` |
 | New project files | `assets/templates/stack-guide.template.md`, `assets/templates/constitution-seed.template.md`, `assets/CLAUDE.template.md`, `assets/templates/` (Makefile, Dockerfile, compose, .env.example) |
 

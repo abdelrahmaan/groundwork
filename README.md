@@ -82,8 +82,8 @@ Discovery interview — goal, first user, success signal, constraints,
 Writes three or four files, nothing else:
   docs/stack-guide.md        ← binding decisions + glossary + rules + deferred items and their triggers
   CLAUDE.md                  ← short session context, points at the stack guide
-  tasks.md                   ← MVP tasks + "Later" (skipped when Spec Kit is in use — it owns tasks)
-  docs/constitution-seed.md  ← paste-ready text for /speckit.constitution
+  tasks.md                   ← MVP tasks + "Later" (skipped when a spec workflow is in use — it owns tasks)
+  docs/constitution-seed.md  ← the principles, for your spec workflow's rules slot
   ↓
 Build the MVP slice — one user story end to end, files created one at a time as needs appear
 ```
@@ -93,18 +93,33 @@ Build the MVP slice — one user story end to end, files created one at a time a
 **Teaching mode:** every step says what, why, the alternative, then the minimal code.
 **Readable code:** small functions, meaningful names, consistent conventions across Python, TypeScript, and Dart.
 
-## With GitHub Spec Kit
+## With a spec workflow — Spec Kit, OpenSpec, Superpowers, or another
 
-They compose: **Spec Kit owns the process, Groundwork owns the engineering standard.**
+Groundwork doesn't replace your spec workflow. It plugs into it: **the workflow owns the process,
+Groundwork owns the engineering standard.** Every spec workflow has a place for standing rules. Groundwork
+puts a pointer to the binding stack guide there, so the plan follows the stack you agreed on instead of
+inventing one. The workflow keeps its own task list, and Groundwork doesn't write a second one.
+
+| Workflow | Where Groundwork's rules go | Who owns the tasks |
+|---|---|---|
+| [GitHub Spec Kit](https://github.com/github/spec-kit) | `/speckit.constitution` ← paste `docs/constitution-seed.md` | `specs/NNN-<name>/tasks.md` |
+| [OpenSpec](https://github.com/Fission-AI/OpenSpec) | `openspec/config.yaml` → `context:` + per-artifact `rules:` | `openspec/changes/<change>/tasks.md` |
+| [Superpowers](https://github.com/obra/superpowers) | `CLAUDE.md` (Superpowers ranks it above its skills) + the plan's Global Constraints | the plan in `docs/superpowers/plans/` |
+| anything else | its rules/config slot, or `CLAUDE.md` / `AGENTS.md` if it has none | the workflow's own list |
+| none | — | root `tasks.md` |
 
 ```
-Groundwork discovery  →  docs/stack-guide.md
-/speckit.constitution →  paste docs/constitution-seed.md
-/speckit.specify → clarify → plan → tasks → implement → converge
-                      ↑ plan obeys the stack guide; it never invents a stack
+Groundwork discovery  →  docs/stack-guide.md  (+ "which spec workflow?")
+       ↓ rules slot points at the stack guide
+spec → plan → tasks → implement      ← the workflow's own commands
+       ↑ plan obeys the stack guide; it never invents a stack
+review gate: the workflow's + Groundwork's review checklist
 ```
 
-Details in [`references/spec-kit.md`](./skills/groundwork/references/spec-kit.md).
+OpenSpec 1.13.2 and Superpowers 6.3.0 were checked against installed copies on 2026-09-24; Spec Kit
+against its docs on 2026-09-20. Other workflows get a five-step recipe that is labelled unverified. Details
+in [`references/spec-workflows.md`](./skills/groundwork/references/spec-workflows.md) and
+[`references/spec-kit.md`](./skills/groundwork/references/spec-kit.md).
 
 ## Opinions it holds (and why)
 
@@ -128,6 +143,7 @@ skills/groundwork/
   references/ops-and-review.md    Makefile, Docker dev/prod, CI, observability, load testing, review checklist
   references/repo-and-kits.md     monorepo vs polyrepo, contract distribution, starter kits
   references/code-style.md        naming conventions and readability rules per language
+  references/spec-workflows.md    running alongside any spec workflow (OpenSpec, Superpowers, others)
   references/spec-kit.md          running alongside GitHub Spec Kit
   references/frameworks.md        LangChain vs LlamaIndex vs Haystack vs Pydantic AI vs no framework
   assets/templates/               stack-guide, constitution-seed, Makefile, Dockerfile, compose, .env.example
@@ -149,7 +165,7 @@ claude plugin validate .claude-plugin/plugin.json --strict
 ## Notes
 
 Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving
-areas (LangChain middleware, Spec Kit commands, TanStack Start, MCP spec, embedding leaderboards)
+areas (LangChain middleware, Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards)
 should be re-checked before adoption.
 
 ## License

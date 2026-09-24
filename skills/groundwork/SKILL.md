@@ -1,6 +1,6 @@
 ---
 name: groundwork
-description: Use when any task touches an API-first or Arabic-first product — starting one, or working inside one that already exists. Single tasks count — "add an endpoint", "add streaming", "add a chatbot or agent or RAG", "build the frontend", "review this code", "which stack should I use", "new project", "scaffold", "MVP". Also any mention of FastAPI, Pydantic, uv, LangChain, LangGraph, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, SSE, middleware, OpenAPI, Next.js, TanStack, shadcn, Flutter, Riverpod, RTL/Arabic UI, or a spec workflow (GitHub Spec Kit, OpenSpec, Superpowers) — even if this skill is not named, and even when the request looks answerable without it.
+description: Use for any FastAPI, Pydantic, LangChain/LangGraph, RAG, SSE streaming, OpenAPI, Next.js, Flutter or Arabic/RTL work — including one change to an existing production service ("add a streaming endpoint to our FastAPI service", "add an endpoint", "add RAG over our documents", "review this code") as well as a new product ("new project", "scaffold", "MVP", "which stack should I use", "build the frontend", "Flutter app"). Also uv, Deep Agents, hybrid RAG, Qdrant, pgvector, vLLM, middleware, TanStack, shadcn, Riverpod, and spec workflows (GitHub Spec Kit, OpenSpec, Superpowers). Use it even if it is not named, and even when the request looks answerable without it.
 ---
 
 # Groundwork
@@ -31,6 +31,9 @@ Last verified against official docs: 2026-09-20. Version floors live in each ref
 
 ### 1.1 Kickoff mode — never code first
 1. Ask what it does: purpose, core entities, main use cases (≤ 4 focused questions).
+   **The first reply also carries two things, every time:**
+   - **The language profile, when the request mentions Arabic, RTL, or any non-English language** — the three separate questions from §2C (content language, question language, answer language) as one grouped question with options and a recommendation. It decides the embedder and the UI direction, so it can't wait for a later batch.
+   - **What kickoff will produce:** `docs/stack-guide.md`, `CLAUDE.md`, `docs/constitution-seed.md`, and `tasks.md` unless a spec workflow owns the task list (§3) — written only after the user confirms the summary.
 2. Run **Discovery (§2)**, then walk the **Decision Register (§6)** — ask only what is still open.
 3. Every question comes with **options + a recommendation + a one-line reason**, so the answer can be "yes" — and the user can say no. A recommendation is never phrased as a requirement; if the user picks an alternative, adopt it fully, record it in the stack guide, and follow *its* rules (§7.4) from then on.
 4. Summarize back and get a yes, then write the **kickoff outputs (§3)** — nothing more.

@@ -17,7 +17,7 @@ It never runs a second copy of the process.
 | **Spec** | behavior, user stories, acceptance criteria | uses the glossary's names; stack guide §2 is its input |
 | **Plan / design** | how it will be built | implements the stack guide, never re-decides it |
 | **Tasks** | ordered work items | owned by the workflow — Groundwork writes no second list |
-| **Review gate** | "is it done?" | adds `ops-and-review.md` §8 as the human gate |
+| **Review gate** | "is it done?" | adds `ops-and-review.md` §10 as the human gate |
 
 The invariants are the same whichever workflow fills the slots, and live in one place each:
 stack guide outranks everything (SKILL.md §3), one scope authority (`spec-kit.md` §3c),
@@ -70,7 +70,7 @@ Where Groundwork plugs in:
   Global Constraints. On a harness where subagents don't load `CLAUDE.md`, this line is the only way
   the stack guide reaches them.
 - **Tasks**: the plan owns them. No root `tasks.md`.
-- **Review**: `requesting-code-review` per task, then `ops-and-review.md` §8 before
+- **Review**: `requesting-code-review` per task, then `ops-and-review.md` §10 before
   `finishing-a-development-branch`.
 - TDD already matches Groundwork's test-first rule; nothing to reconcile.
 
@@ -101,13 +101,19 @@ Where Groundwork plugs in:
       - Close any OPEN item from the stack guide there, in the same commit.
     tasks:
       - Endpoint and data tasks start with a failing test.
+  operations:
+    archive:
+      guidance:
+        - Before archiving, run the groundwork review checklist (ops-and-review.md §10); archive only when it passes.
   ```
 
 - **`proposal.md`** = the spec slot's *why*; stack guide §2 is its input, and it becomes the scope
   authority once written (`spec-kit.md` §3c).
 - **`design.md`** = the plan slot.
 - **`tasks.md`** (per change) owns the task list. No root `tasks.md`.
-- **Review**: `ops-and-review.md` §8 before `/opsx:archive` — archiving is OpenSpec's "done".
+- **Review**: `ops-and-review.md` §10 before `/opsx:archive` — archiving is OpenSpec's "done". Put it in
+  `operations.archive.guidance` (above): OpenSpec delivers that guidance at the archive step only, not to
+  the artifacts or to apply — checked on 1.13.2 with `openspec instructions archive --change <name> --json`.
 
 ## 5. Spec Kit
 
@@ -123,7 +129,7 @@ Not verified here — apply the recipe and tell the human it's unverified:
    paste the stack guide — it goes stale in two places.
 3. Find where it writes the plan and the task list. The plan obeys the stack guide; the task list
    is the workflow's, so Groundwork writes no root `tasks.md`.
-4. Add `ops-and-review.md` §8 before the workflow's "done" step.
+4. Add `ops-and-review.md` §10 before the workflow's "done" step.
 5. Test it once: ask it to plan a small feature and check that the plan names the stack guide and
    uses only what it lists. If it doesn't, the rules slot is wrong — fix it before building.
 

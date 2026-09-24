@@ -64,11 +64,11 @@ Alternatives: **openapi-typescript + openapi-fetch** (types-only, zero runtime �
 ## 6. Streaming AI responses
 
 - `EventSource` is **GET-only** → for POST chat use **fetch + ReadableStream** or `@microsoft/fetch-event-source`.
-- Parse the backend's typed events (`run_started`, `token`, `tool_call`, `tool_result`, `citation`, `interrupt`, `error`, `done`) into UI state machines. One reducer, not scattered `useState`.
+- Parse the backend's typed events (`run_started`, `token`, `tool_call`, `tool_result`, `sources`, `citation`, `interrupt`, `error`, `done`) into UI state machines. One reducer, not scattered `useState`.
 - Append tokens functionally (`setText(prev => prev + delta)`) to avoid stale-closure bugs; batch renders (rAF or small interval) for long streams.
 - **AbortController** on unmount/cancel → the backend detects disconnect and stops billing tokens.
 - Persist completed messages server-side always; add **Last-Event-ID resume** only when a requirement asks for it (it needs a Redis chunk buffer).
-- Render markdown progressively; render citations as chips linked to sources; show tool calls as status rows; `interrupt` events open the approve/edit/reject UI.
+- Render markdown progressively; render `[n]` markers as chips linked to the source with the same `marker` (show `sources` in a side panel as soon as they arrive); show tool calls as status rows; `interrupt` events open the approve/edit/reject UI.
 - Measure **TTFT** as the headline UX metric.
 - Shortcut: **Vercel AI SDK UI `useChat`** handles the fetch-and-parse loop if you adopt its stream protocol end to end. Hand-roll when you want your own event schema (the default here).
 

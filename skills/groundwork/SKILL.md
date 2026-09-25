@@ -48,6 +48,16 @@ After: one line — "The pattern to remember: …".
 ### 1.4 High-level first, fix-first
 Explain the plan before executing. Answer the question that was asked — don't turn a question into a build task. In reviews: list what's missing/broken first, explain after.
 
+### 1.5 Task mode — one task inside an existing project
+When the repo already has code or a `docs/stack-guide.md`, a request like "add an endpoint" is a task, not a kickoff. Don't run Discovery or walk the whole Decision Register.
+1. Read `docs/stack-guide.md`, `CLAUDE.md`, and the active task list first. The stack guide is binding.
+2. Ask **only the decisions this task cannot proceed without** — with options and a recommendation, as in §1.1.
+3. Any other open item you notice goes into the stack guide as **OPEN** (§4 open questions, with an owner and a date). Don't ask about it now.
+4. No stack guide but existing code: state the stack you read from the code in one line, follow it, and offer to write a stack guide later — never a kickoff interview.
+5. Then build the task by §8.
+
+(Measured 2026-09-24: in a scaffolded project the skill loaded 3/3, but one run asked six open register decisions before adding one endpoint.)
+
 ---
 
 ## 2. Discovery — ask before recommending

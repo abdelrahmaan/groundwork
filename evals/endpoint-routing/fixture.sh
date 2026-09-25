@@ -49,12 +49,27 @@ cat > docs/stack-guide.md <<'MD'
 
 | Area | Choice | Why (one line) |
 |---|---|---|
+| Agent tier | Fixed RAG chain, no agent framework | one fixed sequence: retrieve, rerank, answer |
 | Backend | FastAPI 0.141 + Pydantic v2, uv | async, typed, the team's language |
 | Database | Postgres + SQLAlchemy 2.0 async + Alembic | relations + reporting |
-| Vector store | Qdrant, hybrid (BM25 + dense, RRF) | Arabic + English in one document |
-| Embeddings | BGE-M3 | Arabic + English mixed |
+| Vector store | Qdrant | native hybrid search |
+| Retrieval | Hybrid BM25 + dense, RRF, rerank, score threshold | Arabic + English in one document |
+| Embeddings | BGE-M3, self-hosted | Arabic + English mixed |
 | Reranker | Cohere Rerank | multilingual |
+| LLM | Hosted API via init_chat_model | no data-residency constraint |
+| Gateway | None | one provider |
+| Tracing | Langfuse, self-hosted | HR content stays on our VM |
+| Monitoring | Structured logs + /metrics; no Grafana yet | one instance, low traffic |
+| Cache | None yet | no measured hot path |
+| Rate limiting | Per-user token bucket on the chat route | LLM cost |
+| Jobs | BackgroundTasks | ingestion runs are small |
+| Secrets | .env + .env.example | one VM |
+| Multi-tenancy | Single tenant | one company |
+| Auth | Entra ID (company SSO) | staff already have accounts |
+| Languages | Arabic + English content, Arabic answers, RTL UI | HR policies are bilingual |
 | Hosting | Docker Compose | one VM |
+
+**Open questions / OPEN decisions:** none.
 MD
 
 cat > tasks.md <<'MD'

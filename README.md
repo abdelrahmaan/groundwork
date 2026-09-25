@@ -164,6 +164,12 @@ claude plugin validate .claude-plugin/plugin.json --strict
 
 ## Notes
 
+**When the skill loads on its own.** Inside a project Groundwork set up, the `CLAUDE.md` it writes
+points at the skill, and it loads reliably (3 of 3 eval runs, 2026-09-24). On a fresh, single-task
+request with no such `CLAUDE.md` ("build search over our PDFs"), Claude often answers without it (0
+of 6) — type `/groundwork` or say "use groundwork" there.
+
+
 Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving
 areas (LangChain middleware, Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards)
 should be re-checked before adoption.

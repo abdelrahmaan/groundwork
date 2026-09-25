@@ -55,8 +55,8 @@ explicitly which reference file to open before each kind of work.
 
 ## Use it
 
-The skill fires on its own when a task matches its triggers — a new project, a new endpoint, a
-chatbot, a Flutter app, a code review. To call it directly:
+Inside a project Groundwork set up, it loads on its own: the `CLAUDE.md` it writes points at it. For
+a brand-new project, or a single task in a repo it didn't set up, call it directly:
 
 ```
 /groundwork I want an Arabic-first booking API with a Flutter app
@@ -87,6 +87,11 @@ Writes three or four files, nothing else:
   ↓
 Build the MVP slice — one user story end to end, files created one at a time as needs appear
 ```
+
+**Inside an existing project it doesn't interview you.** A request like "add a streaming endpoint"
+is one task: it reads `docs/stack-guide.md`, `CLAUDE.md` and the task list, asks only what the task
+can't be built without, writes anything else it notices into the stack guide as OPEN, and builds it
+test-first.
 
 **Ask more, guess less:** every unanswered question becomes a guess baked into the foundation; unknowns go to the stack guide's open-questions list with an owner and a date.
 **MVP first:** no file, service, or dependency exists without a stated need, a use this week, and nothing simpler that works.
@@ -124,6 +129,11 @@ in [`references/spec-workflows.md`](./skills/groundwork/references/spec-workflow
 ## Opinions it holds (and why)
 
 - **LangChain `create_agent` for the agent layer, your own code for retrieval.** Frameworks earn their place on the hard generic part (tool loop, state, interrupts, streaming); they cost you on the part that's specific to you (chunking, hybrid fusion, Arabic normalization). Full comparison with LlamaIndex, Haystack, Pydantic AI and DSPy in [`references/frameworks.md`](./skills/groundwork/references/frameworks.md).
+- **Grounded answers stream with their sources.** Retrieval sends `sources` first, the answer streams
+  as `token`s with inline `[n]` markers, then one `citation` per source actually cited, then `done`.
+  Markers the model invented are dropped. Structured output is kept out of the stream on purpose:
+  `with_structured_output` with a Pydantic schema returns once, at the end, and through
+  `create_agent` it streams as raw JSON (tested on LangChain 1.4.2, 2026-09-24).
 - **Every model behind an OpenAI-compatible endpoint** — OpenAI, Azure, LiteLLM, or self-hosted vLLM are a `.env` change, not a code change.
 
 ## What's inside
@@ -149,7 +159,29 @@ skills/groundwork/
   assets/templates/               stack-guide, constitution-seed, Makefile, Dockerfile, compose, .env.example
   assets/CLAUDE.template.md       per-project CLAUDE.md
 commands/groundwork.md            the /groundwork slash command
+evals/                            eval cases: prompt, graders, and a scaffolded project fixture
 .claude-plugin/                   plugin.json + marketplace.json
+```
+
+## Does it help? Measured
+
+Each case runs 3 times with the skill and 3 times without it, on the same model
+(`claude plugin eval`, 2026-09-24/25):
+
+| Case | Score with | Score without |
+|---|---|---|
+| Kickoff for a new Arabic app: 3-way language profile, options with a recommendation, the kickoff files named | 1.00 | 0.00 |
+| Streaming endpoint in an existing Groundwork project: stack guide respected, typed events, native `EventSourceResponse` | 0.67 | 0.00 |
+| Search over Arabic PDFs, sharpened to cross-lingual retrieval, a score threshold, per-language evals | 0.00 | 0.33 |
+
+Scores are the mean over 3 runs. On the endpoint case, all 3 runs with the skill used
+`EventSourceResponse` (none without it); 1 of 3 passed every criterion.
+
+The last row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md`, the skill didn't
+load (see Notes).
+
+```bash
+claude plugin eval . --scaffold --trust-plugin   # --scaffold builds the existing-project fixture
 ```
 
 ## Contributing
@@ -169,8 +201,9 @@ points at the skill, and it loads reliably (3 of 3 eval runs, 2026-09-24). On a 
 request with no such `CLAUDE.md` ("build search over our PDFs"), Claude often answers without it (0
 of 6) — type `/groundwork` or say "use groundwork" there.
 
-
-Verified against official docs on 2026-09-20; per-file version floors noted inside. Fast-moving
+Verified against official docs on 2026-09-20; streaming, structured output and citations were re-tested
+against the installed libraries on 2026-09-24, and OpenSpec 1.13.2 / Superpowers 6.3.0 against installed
+copies the same day. Per-file version floors are noted inside. Fast-moving
 areas (LangChain middleware, Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards)
 should be re-checked before adoption.
 

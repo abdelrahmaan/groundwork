@@ -58,8 +58,10 @@ explicitly which reference file to open before each kind of work.
 New versions don't reach you on their own unless you turn that on.
 
 **Claude Code plugin.** Auto-update is off by default for third-party marketplaces, and a
-marketplace can't switch it on for you. Turn it on once:
-`/plugin` → **Marketplaces** → `abdokamar` → **Enable auto-update**. After that, each release
+marketplace can't switch it on for you. Turn it on once, inside a Claude Code session in the
+terminal (not the desktop app's Settings → Plugins page, which lists only Anthropic's directory):
+run `/plugin`, press Tab to reach **Marketplaces**, select `abdokamar`, then **Enable auto-update**.
+There is no shell command for this toggle. After that, each release
 arrives in the background: the running session shows `Run /reload-plugins to apply`, and the next
 session loads it without asking. To update by hand instead:
 

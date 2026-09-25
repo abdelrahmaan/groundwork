@@ -53,6 +53,30 @@ Two practical differences outside Claude Code: auto-triggering from the descript
 (just say "use groundwork"), and progressive disclosure varies — so the skill tells the agent
 explicitly which reference file to open before each kind of work.
 
+### Updating
+
+New versions don't reach you on their own unless you turn that on.
+
+**Claude Code plugin.** Auto-update is off by default for third-party marketplaces, and a
+marketplace can't switch it on for you. Turn it on once:
+`/plugin` → **Marketplaces** → `abdokamar` → **Enable auto-update**. After that, each release
+arrives in the background: the running session shows `Run /reload-plugins to apply`, and the next
+session loads it without asking. To update by hand instead:
+
+```bash
+claude plugin update abdokamar-groundwork@abdokamar
+```
+
+**Skills CLI.** No automatic updates. Run `npx skills@latest update groundwork` (`-g` for a global
+install, `-p` for a project one).
+
+**claude.ai.** Re-upload the skill folder for each release.
+
+Releases bump `version` in `.claude-plugin/plugin.json`; installed copies only change when that
+number does. Source: Claude Code docs,
+[Keep plugins updated](https://code.claude.com/docs/en/plugins/install.md#keep-plugins-updated),
+checked 2026-09-25.
+
 ## Use it
 
 Inside a project Groundwork set up, it loads on its own: the `CLAUDE.md` it writes points at it. For

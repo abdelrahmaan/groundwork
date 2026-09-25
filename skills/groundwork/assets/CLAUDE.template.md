@@ -35,7 +35,7 @@ make gen-clients    # regenerate TS + Dart clients from openapi.json
 - API: `/api/v1`; errors = RFC 9457 problem+json with stable `code` + `trace_id`.
 - Settings: `app/core/config.py`; secrets only in `.env` (never committed); `.env.example` always current.
 - Prompts: `app/ai/prompts.py` (versioned). Tools: `app/ai/tools.py`. Agent built once in lifespan.
-- Streaming: typed SSE events (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`).
+- Streaming: typed SSE events (`token`, `tool_call`, `sources`, `citation`, `interrupt`, `error`, `done`).
 
 ## Rules for Claude here
 1. Read the active task list first — `tasks.md`, or the spec workflow's own (`specs/NNN-*/tasks.md`, `openspec/changes/<change>/tasks.md`, `docs/superpowers/plans/*.md`); mark the item in progress.

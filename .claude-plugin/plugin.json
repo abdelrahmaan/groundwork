@@ -1,6 +1,6 @@
 {
   "name": "abdokamar-groundwork",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A full-stack engineering standard for API-first, Arabic-first products: FastAPI + Pydantic v2 backends, LangChain agents and hybrid RAG, React/Next.js web, Flutter mobile, joined by one OpenAPI contract.",
   "author": {
     "name": "Abdo Kamar",

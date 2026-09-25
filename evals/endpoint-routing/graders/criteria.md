@@ -3,18 +3,20 @@ type: llm
 weight: 1
 ---
 
-Judge whether the response applies THIS standard's API contract rules to an
-existing service. A capable assistant without the standard will suggest SSE;
-that alone is not a pass.
+The workspace is an existing Groundwork project with a complete stack guide and no open
+decisions. Judge the API contract and how the task is handled. (Which SSE response class it
+uses is checked by a separate regex grader, not here.)
 
 Passing requires ALL of:
-- It says that `docs/stack-guide.md` in the repo, if present, is binding and
-  overrides its own defaults.
-- It specifies a TYPED SSE event schema — named event types carrying defined
-  fields — rather than "stream tokens over SSE".
-- It specifies the error format as RFC 9457 problem details.
-- It does NOT run a full new-project discovery interview; targeted questions
-  about the existing service are fine.
+- It treats `docs/stack-guide.md` as binding: it reads or cites it and stays inside its stack.
+- It specifies a TYPED SSE event schema — named event types carrying defined fields — rather
+  than "stream tokens over SSE".
+- It keeps HTTP errors as RFC 9457 problem details (not an ad-hoc JSON shape), and every
+  stream ends with exactly one `done` or `error` event — the `error` event carrying a code,
+  a detail and a trace id — never a silent close.
+- It treats this as one task in an existing project: it asks only what the endpoint cannot be
+  built without (if anything). It does NOT run a discovery interview or re-ask decisions the
+  stack guide already records (agent tier, tracing, auth, and so on).
 
-Fail if SSE is proposed with no event schema. Fail if the error format is
-unspecified or is an ad-hoc JSON shape. Fail if it opens a kickoff interview.
+Fail if SSE is proposed with no event schema. Fail if it asks about decisions the stack
+guide already records, or opens a kickoff interview.

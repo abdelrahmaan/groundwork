@@ -32,7 +32,7 @@ make check          # fmt + lint + type + test
 - Layout: layer-first. Routers thin → services → repositories.
 - API: `/api/v1`; errors = RFC 9457 problem+json with stable `code` + `trace_id`.
 - Settings: `app/core/config.py`; secrets only in `.env` (never committed).
-- Streaming: typed SSE events (`token`, `tool_call`, `citation`, `interrupt`, `error`, `done`).
+- Streaming: typed SSE events (`token`, `tool_call`, `sources`, `citation`, `interrupt`, `error`, `done`).
 
 ## Rules for Claude here
 1. Read `tasks.md` first; mark the item in progress.

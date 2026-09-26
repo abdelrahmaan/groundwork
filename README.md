@@ -53,6 +53,14 @@ Two practical differences outside Claude Code: auto-triggering from the descript
 (just say "use groundwork"), and progressive disclosure varies — so the skill tells the agent
 explicitly which reference file to open before each kind of work.
 
+### What it installs
+
+Markdown instructions and project templates — nothing that runs on its own. The plugin declares no
+hooks, MCP servers, LSP servers or agents, sends no telemetry, and makes no network calls. The only
+scripts in the repo are under `evals/` and run only when a developer passes `claude plugin eval
+--scaffold`. The generated dev Docker stack publishes its ports on `127.0.0.1` only; in prod only the
+API port is published. Audited 2026-09-26: no hidden Unicode, no secrets in the git history.
+
 ### Updating
 
 New versions don't reach you on their own unless you turn that on.

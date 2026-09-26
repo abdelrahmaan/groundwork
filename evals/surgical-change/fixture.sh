@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # An existing Groundwork project with one real bug, a tempting code smell right next to it, and
-# unrelated dead code, all in a single-quote house style. The CLAUDE.md is the pre-1.5 one (it points
-# at the skill but carries no change-discipline rules), so only the skill can teach them.
+# unrelated dead code, all in a single-quote house style. The CLAUDE.md carries the 1.5 "How to change
+# code here" block copied from the template, because that block (not the skill, which rarely loads for a
+# one-line fix) is how real projects receive the rules. Measured 2026-09-26 with the pre-1.5 CLAUDE.md:
+# 0/6 answers mentioned the dead code, in either arm.
 set -euo pipefail
 mkdir -p app/services tests docs
 
@@ -28,6 +30,12 @@ make check          # fmt + lint + type + test
 ## Rules for Claude here
 1. Read `tasks.md` first; mark the item in progress.
 2. Test-first for endpoints and data.
+
+## How to change code here
+- **Think first**: state assumptions; if the request reads two ways, ask.
+- **Simplest thing that works**: no unrequested features, options, or abstractions.
+- **Surgical**: every changed line traces to the request; match existing style. If a file you touch has unrelated dead code, name it in one line of your reply — don't delete it.
+- **Verifiable**: define the check (test, eval, command) before starting, and run it before calling it done.
 MD
 
 cat > docs/stack-guide.md <<'MD'

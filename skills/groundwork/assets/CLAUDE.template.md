@@ -48,7 +48,7 @@ make gen-clients    # regenerate TS + Dart clients from openapi.json
 ## How to change code here
 - **Think first**: state assumptions; if the request reads two ways, ask.
 - **Simplest thing that works**: no unrequested features, options, or abstractions.
-- **Surgical**: every changed line traces to the request; match existing style; mention unrelated dead code, don't delete it.
+- **Surgical**: every changed line traces to the request; match existing style. If a file you touch has unrelated dead code, name it in one line of your reply — don't delete it.
 - **Verifiable**: define the check (test, eval, command) before starting, and run it before calling it done.
 
 ## Gotchas

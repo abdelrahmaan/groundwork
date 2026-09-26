@@ -119,6 +119,11 @@ is one task: it reads `docs/stack-guide.md`, `CLAUDE.md` and the task list, asks
 can't be built without, writes anything else it notices into the stack guide as OPEN, and builds it
 test-first.
 
+**Every project's `CLAUDE.md` carries four change rules** — think first, simplest thing that works,
+surgical edits, verifiable results — adapted from
+[Andrej Karpathy's guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (MIT). `AGENTS.md`
+is a symlink to it, so Cursor, Codex and other agents follow them too.
+
 **Ask more, guess less:** every unanswered question becomes a guess baked into the foundation; unknowns go to the stack guide's open-questions list with an owner and a date.
 **MVP first:** no file, service, or dependency exists without a stated need, a use this week, and nothing simpler that works.
 **Teaching mode:** every step says what, why, the alternative, then the minimal code.
@@ -199,12 +204,21 @@ Each case runs 3 times with the skill and 3 times without it, on the same model
 | Kickoff for a new Arabic app: 3-way language profile, options with a recommendation, the kickoff files named | 1.00 | 0.00 |
 | Streaming endpoint in an existing Groundwork project: stack guide respected, typed events, native `EventSourceResponse` | 0.67 | 0.00 |
 | Search over Arabic PDFs, sharpened to cross-lingual retrieval, a score threshold, per-language evals | 0.00 | 0.33 |
+| Fix one bug next to a tempting neighbour and unrelated dead code: fix lands, nothing else edited, the test named | 1.00 | 1.00 |
 
 Scores are the mean over 3 runs. On the endpoint case, all 3 runs with the skill used
 `EventSourceResponse` (none without it); 1 of 3 passed every criterion.
 
-The last row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md`, the skill didn't
-load (see Notes).
+The search row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md`, the skill didn't
+load (see Notes). The bug-fix row shows current Claude is already surgical on a small fix; that case
+guards against regressions rather than measuring a gain.
+
+`claude plugin eval` does not load the project's `CLAUDE.md` (a "start every reply with PINEAPPLE"
+`CLAUDE.md` was followed 2 of 2 times by `claude -p`, 0 of 2 inside an eval run), so the generated
+`CLAUDE.md` is measured through real Claude Code with `evals/claude-md-ab.sh`. With and without its
+"How to change code here" block, Claude named the unused function and left it alone 5 of 5 times;
+1 of 5 runs without the block edited files beyond the fix, 0 of 5 with it — a small sample, not a
+proven gain.
 
 ```bash
 claude plugin eval . --scaffold --trust-plugin   # --scaffold builds the existing-project fixture

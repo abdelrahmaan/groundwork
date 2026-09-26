@@ -36,6 +36,9 @@ Keep it short: a constitution is the enforceable rules, not the manual. The deta
     tables, code, and UI. Inventing a synonym downstream is a defect.
 12. Investigation vs decision — research may resolve only items the stack guide marks OPEN, and must close
     them in the stack guide in the same commit. It never overrides a settled decision silently.
+13. Surgical, verified changes — state assumptions before coding; every changed line traces to the task;
+    match existing style; remove only what the change itself orphaned; define the check before starting
+    and run it before calling the task done.
 ```
 
 ---

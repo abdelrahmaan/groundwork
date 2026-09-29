@@ -8,7 +8,7 @@ a production standard.
 [![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757.svg)](#claude-code--as-a-plugin)
 
 <p align="center">
-  <img src="docs/product-intro.gif" alt="Groundwork in a Claude Code terminal: the request, the interview on the goal and the data's language, BGE-M3 recommended with its reason, the answers written into a binding stack guide, one user story shipped with make check and typed stream events, then the install command" width="600">
+  <img src="docs/product-intro.gif" alt="Groundwork in a Claude Code terminal: the request, the interview on the goal and the data's language, BGE-M3 recommended with its reason, the answers written into a binding stack guide, one user story shipped with make check and typed stream events, then the install command" width="960">
   <br>
   <sub>42 seconds, end to end: request → interview → model decision → binding stack guide → shipped user story. Shortened interview, example project.</sub>
 </p>

@@ -261,11 +261,6 @@ copies the same day. Per-file version floors are noted inside. Fast-moving
 areas (LangChain middleware, Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards)
 should be re-checked before adoption.
 
-## Credits
-
-The four change rules paraphrase Andrej Karpathy's guidelines on LLM coding mistakes
-([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), MIT per its SKILL.md).
-
 ## License
 
 MIT — see [LICENSE](./LICENSE).

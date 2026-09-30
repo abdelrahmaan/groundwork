@@ -23,12 +23,11 @@ Everything goes through the Makefile:
 make install        # uv sync --locked
 make dev            # API with reload
 make check          # fmt + lint + type + test
-make eval           # AI evals (Ragas + judge)
-make migrate        # alembic upgrade head
 make docker-dev     # dev stack
 make docker-prod    # prod stack
-make gen-clients    # regenerate TS + Dart clients from openapi.json
 ```
+Added to the Makefile when their need appears (commented there until then): `make migrate`,
+`make eval`, `make gen-clients`. List them here once they exist.
 
 ## Conventions
 - Layout: <layer-first | domain-first>. Routers thin → services → repositories.

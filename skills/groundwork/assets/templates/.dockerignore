@@ -1,0 +1,14 @@
+# Keep secrets, local environments and caches out of the build context and the image.
+# The Dockerfile's `COPY . .` would otherwise bake .env into the prod image.
+.env
+.env.*
+!.env.example
+.venv
+.git
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.DS_Store
+node_modules

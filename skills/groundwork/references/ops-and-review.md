@@ -9,8 +9,9 @@
 
 **Why:** every project exposes the same verbs, so neither you nor an AI agent has to remember per-project commands. `make help` is the project's real README.
 
-Required targets (same names in every repo, backend/web/mobile):
-`help, install, dev, run, fmt, lint, type, test, eval, load, gen-clients, migrate, upgrade, downgrade, docker-dev, docker-prod, logs, clean, check` (= fmt + lint + type + test).
+Targets from day one (same names in every repo, backend/web/mobile):
+`help, install, dev, run, fmt, lint, type, test, check` (= fmt + lint + type + test), `ci` (read-only checks), `docker-dev, docker-prod, logs, clean`.
+Added when their need appears (the template keeps them commented until then, per the MVP gate): `migrate, revision, downgrade` (once `alembic/` exists), `eval` (once `evals/` exists), `load` (once `load/locustfile.py` exists), `openapi` and `gen-clients` (once a generated client exists).
 - Self-documenting help (`##` comments parsed into `make help`).
 - `.PHONY` on every target; fail fast (`set -euo pipefail` in multi-line recipes).
 - Targets wrap `uv run …` / `docker compose …` — never duplicate logic between Makefile and CI; **CI calls the same make targets**.
@@ -31,7 +32,7 @@ Required targets (same names in every repo, backend/web/mobile):
 - Templates in `assets/templates/` (Dockerfile, compose.yaml, compose.override.yaml, compose.prod.yaml).
 
 ## 4. CI (GitHub Actions)
-`make check` (format → lint → type → unit tests) → integration tests (service containers) → **OpenAPI snapshot diff** → **evals (`make eval`, when AI code/prompts change)** → `pip-audit` + SBOM → build image → deploy.
+`make ci` (format check → lint → type → unit tests, read-only — `make check` rewrites files) → integration tests (service containers) → **OpenAPI snapshot diff** → **evals (`make eval` once `evals/` exists, when AI code/prompts change)** → `pip-audit` + SBOM → build image → deploy.
 Load tests (`make load`) run on demand/pre-release against staging, not on every PR.
 Pre-commit hooks mirror the fast parts (format, lint, type check).
 

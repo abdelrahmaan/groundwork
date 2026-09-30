@@ -3,12 +3,12 @@
 services:
   api:
     build: {target: dev}
-    volumes: ["./:/app"]
+    volumes: ["./:/app", "/app/.venv"]   # anonymous volume keeps the image's Linux .venv visible under the bind mount
     ports: ["127.0.0.1:8001:8000"]
     environment: {APP_ENV: dev, LOG_LEVEL: DEBUG}
   worker:
     build: {target: dev}
-    volumes: ["./:/app"]
+    volumes: ["./:/app", "/app/.venv"]   # anonymous volume keeps the image's Linux .venv visible under the bind mount
   db:
     ports: ["127.0.0.1:5432:5432"]
   redis:

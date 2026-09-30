@@ -45,7 +45,7 @@ Rule of thumb: **SSR earns its complexity only when an anonymous visitor or a cr
 
 **Recommendation: Hey API (`@hey-api/openapi-ts`)** — plugin-based, emits the client plus TanStack Query hooks and Zod/Valibot schemas for runtime validation.
 Alternatives: **openapi-typescript + openapi-fetch** (types-only, zero runtime — note openapi-fetch/openapi-react-query moved to maintenance mode), **Orval** (batteries-included, mocks), **Kubb** (most modular).
-- Generation is a `make gen-client` / `pnpm gen:api` step wired to CI; the generated folder is committed or built on install — pick one and never hand-edit it.
+- Generation is a `make gen-clients` / `pnpm gen:api` step wired to CI; the generated folder is committed or built on install — pick one and never hand-edit it.
 - The spec comes from the running backend or a published `openapi.json` artifact (see `repo-and-kits.md`).
 - A breaking spec change should break the TypeScript build. That's the point.
 

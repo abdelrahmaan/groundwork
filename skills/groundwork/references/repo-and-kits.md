@@ -10,7 +10,7 @@
 - **Versioning**: semver the spec; a breaking change means a new URL version (`/api/v2`) and a deprecation window for v1 (see `fastapi.md` §5).
 - **Contract testing**: **Schemathesis** (property-based, FastAPI-native — the strongest pick here); Dredd or Pact if you need consumer-driven contracts across teams.
 - CI gate: diff the committed `openapi.json` snapshot on every PR. A silent contract change should fail the build, not surprise a shipped mobile app.
-- Regeneration is a make target (`make gen-clients`) that runs in CI, so no one hand-edits generated code.
+- Regeneration is a make target (`make gen-clients`, added to the Makefile once a client exists) that runs in CI, so no one hand-edits generated code.
 
 ## 2. Shared conventions (identical across web and mobile)
 

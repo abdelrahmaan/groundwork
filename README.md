@@ -32,7 +32,7 @@ app, all sharing one API contract.
 
 ## Install
 
-Pick **one** route. Both install the same skill.
+Pick **one** route. Both install the same skill, so taking both leaves you with two copies of it.
 
 **Claude Code (plugin):**
 
@@ -50,8 +50,24 @@ If another marketplace on your machine offers a plugin with the same name, insta
 npx skills@latest add abdelrahmaan/groundwork
 ```
 
-It installs Markdown instructions and project templates only. Nothing runs on its own: no hooks, no
-MCP servers, no telemetry, no network calls.
+It installs Markdown instructions and project templates only. Nothing runs on its own: no hooks, MCP
+servers, LSP servers or agents, no telemetry, no network calls.
+
+<details>
+<summary><b>Install details: the two routes</b></summary>
+
+**Claude Code plugin.** A managed, read-only bundle: you subscribe to it, and
+`/plugin update abdokamar-groundwork` brings new versions. The first command registers the catalog; the
+second enables the plugin from it, and both are needed. This route also installs the `/groundwork`
+command, which is what you type day to day; the plugin name is only used at install time.
+
+**Skills CLI.** Copies editable skill files into your project. Works with Claude Code, Codex, Cursor,
+OpenCode, and other agents that follow the Agent Skills standard. Two practical differences outside
+Claude Code: auto-triggering from the description is less reliable (just say "use groundwork"), and
+progressive disclosure varies, so the skill tells the agent explicitly which reference file to open
+before each kind of work.
+
+</details>
 
 ## Use it
 
@@ -144,6 +160,14 @@ follows the stack you agreed on instead of inventing one, and it doesn't write a
 | anything else | its rules/config slot, or `CLAUDE.md` / `AGENTS.md` if it has none | the workflow's own list |
 | none | — | root `tasks.md` |
 
+```
+Groundwork discovery  →  docs/stack-guide.md  (+ "which spec workflow?")
+       ↓ rules slot points at the stack guide
+spec → plan → tasks → implement      ← the workflow's own commands
+       ↑ plan obeys the stack guide; it never invents a stack
+review gate: the workflow's + Groundwork's review checklist
+```
+
 OpenSpec 1.13.2 and Superpowers 6.3.0 were checked against installed copies on 2026-09-24; Spec Kit
 against its docs on 2026-09-20. Other workflows get a five-step recipe that is labelled unverified.
 Details in [`references/spec-workflows.md`](./skills/groundwork/references/spec-workflows.md) and
@@ -156,10 +180,13 @@ Details in [`references/spec-workflows.md`](./skills/groundwork/references/spec-
 
 New versions don't reach you on their own unless you turn that on.
 
-**Claude Code plugin.** Auto-update is off by default for third-party marketplaces. Turn it on once,
-inside a Claude Code session in the terminal (not the desktop app's Settings → Plugins page): run
-`/plugin`, press Tab to reach **Marketplaces**, select `abdokamar`, then **Enable auto-update**. Or update
-by hand:
+**Claude Code plugin.** Auto-update is off by default for third-party marketplaces, and a
+marketplace can't switch it on for you. Turn it on once, inside a Claude Code session in the
+terminal (not the desktop app's Settings → Plugins page, which lists only Anthropic's directory):
+run `/plugin`, press Tab to reach **Marketplaces**, select `abdokamar`, then **Enable auto-update**.
+There is no shell command for this toggle. After that, each release arrives in the background: the
+running session shows `Run /reload-plugins to apply`, and the next session loads it without asking.
+To update by hand instead:
 
 ```bash
 claude plugin update abdokamar-groundwork@abdokamar
@@ -212,9 +239,10 @@ history.
 
 ## Good to know
 
-- **When it loads on its own.** Inside a project Groundwork set up, reliably. On a fresh one-off request
-  with no Groundwork `CLAUDE.md`, the agent may answer without it: type `/groundwork` or say
-  "use groundwork".
+- **When it loads on its own.** Inside a project Groundwork set up, the `CLAUDE.md` it writes points at
+  the skill, and it loads reliably (3 of 3 eval runs, 2026-09-24). On a fresh, single-task request with
+  no such `CLAUDE.md` ("build search over our PDFs"), Claude often answers without it (0 of 6): type
+  `/groundwork` or say "use groundwork" there.
 - **How it's tested.** Eval cases, method and results are in [`evals/README.md`](./evals/README.md).
 - **Freshness.** Checked against official docs on 2026-09-20; streaming, structured output and citations
   re-tested against the installed libraries on 2026-09-24. Fast-moving areas (LangChain middleware,

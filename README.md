@@ -130,7 +130,10 @@ test-first.
 **Every project's `CLAUDE.md` carries four change rules** — think first, simplest thing that works,
 surgical edits, verifiable results — adapted from
 [Andrej Karpathy's guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (paraphrased; their SKILL.md declares MIT). `AGENTS.md`
-is a symlink to it, so Cursor, Codex and other agents follow them too.
+is a symlink to it, so Cursor, Codex and other agents follow them too. The same rules are principle 13
+of the constitution seed. With Spec Kit that makes them a gate, not advice: `/speckit.plan` runs a
+Constitution Check that "must pass before Phase 0" and errors on unjustified violations, and
+`/speckit.analyze` marks constitution conflicts CRITICAL (checked in `specify` 1.0.6's own templates).
 
 **Ask more, guess less:** every unanswered question becomes a guess baked into the foundation; unknowns go to the stack guide's open-questions list with an owner and a date.
 **MVP first:** no file, service, or dependency exists without a stated need, a use this week, and nothing simpler that works.

@@ -11,7 +11,7 @@ The reader is a tired engineer at 2am, not a compiler. Optimize for that.
 5. **Names carry the meaning.** `active_subscribers` not `data2`; `retry_after_seconds` not `t`.
 6. **Comments explain *why*, never *what*.** Decisions, trade-offs, links to the issue/RFC. Delete commented-out code.
 7. **Explicit over implicit.** No magic globals, no hidden side effects, no truthiness tricks on domain objects.
-8. **Types are documentation.** Full type hints in Python, `strict` TypeScript, sound Dart types. No `Any`/`any`/`dynamic` without a comment saying why.
+8. **Types are documentation.** Full type hints in Python, `strict` TypeScript, sound Dart types. No `Any`/`any`/`dynamic` without a comment saying why. In existing untyped code, type only the lines you write — adding hints across a file while fixing a bug is a drive-by change (SKILL.md §7.2, surgical changes).
 9. **Errors are part of the design.** Typed domain errors, never bare `except:` / `catch {}`; never swallow silently.
 10. **Delete before you add — your own leftovers.** Remove what *your* change made unused, and never add "might need later" flags or abstractions. Pre-existing dead code you didn't touch: mention it, don't delete it unasked (SKILL.md §7.2, surgical changes).
 

@@ -129,8 +129,11 @@ test-first.
 
 **Every project's `CLAUDE.md` carries four change rules** — think first, simplest thing that works,
 surgical edits, verifiable results — adapted from
-[Andrej Karpathy's guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (MIT). `AGENTS.md`
-is a symlink to it, so Cursor, Codex and other agents follow them too.
+[Andrej Karpathy's guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (paraphrased; their SKILL.md declares MIT). `AGENTS.md`
+is a symlink to it, so Cursor, Codex and other agents follow them too. The same rules are principle 13
+of the constitution seed. With Spec Kit that makes them a gate, not advice: `/speckit.plan` runs a
+Constitution Check that "must pass before Phase 0" and errors on unjustified violations, and
+`/speckit.analyze` marks constitution conflicts CRITICAL (checked in `specify` 1.0.6's own templates).
 
 **Ask more, guess less:** every unanswered question becomes a guess baked into the foundation; unknowns go to the stack guide's open-questions list with an owner and a date.
 **MVP first:** no file, service, or dependency exists without a stated need, a use this week, and nothing simpler that works.
@@ -220,6 +223,10 @@ Scores are the mean over 3 runs. On the endpoint case, all 3 runs with the skill
 The search row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md`, the skill didn't
 load (see Notes). The bug-fix row shows current Claude is already surgical on a small fix; that case
 guards against regressions rather than measuring a gain.
+
+These are the signals Karpathy's guidelines name for "working": fewer unnecessary changes in diffs,
+fewer rewrites from overcomplication, and clarifying questions before implementation rather than
+after mistakes. The kickoff and bug-fix cases measure the first and last of those directly.
 
 `claude plugin eval` does not load the project's `CLAUDE.md` (a "start every reply with PINEAPPLE"
 `CLAUDE.md` was followed 2 of 2 times by `claude -p`, 0 of 2 inside an eval run), so the generated

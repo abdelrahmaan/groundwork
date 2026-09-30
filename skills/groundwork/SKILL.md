@@ -275,12 +275,12 @@ How the work is done. Independent of stack; this is what makes the skill worth l
 - **MVP gate**: no file, service, or dependency without a stated need, a use this week, and nothing simpler that works (§4). No error handling for cases that can't happen, and no options nobody asked for.
 - **Docs over memory**: fetch current library docs before writing code against a library — training data goes stale, and this is how wrong APIs get shipped.
 - **Decide once, write it down**: every technical choice lands in `docs/stack-guide.md` with its reason. A later step that contradicts it is a bug, not a preference.
-- **Think before coding**: state your assumptions. If the request reads two ways, show both and ask; if something is unclear, stop and name it instead of guessing.
+- **Think before coding**: state your assumptions. If the request reads two ways, show both and ask; if something is unclear, stop and name it instead of guessing. For a trivial task, use judgment — don't turn a one-line fix into an interview.
 - **Surgical changes**: every changed line traces to the request. Match the existing style, leave adjacent code alone, remove only what *your* change made unused, and mention unrelated dead code instead of deleting it.
 - **Goal-driven**: before starting, turn the task into a check you can run — a failing test, an eval, a command. Multi-step work gets a short plan where each step ends in `→ verify:`.
 - **Test-first** for endpoints and data tasks; an AI behavior change isn't done until its eval set has run.
 
-The three rules above are adapted from Andrej Karpathy's guidelines on LLM coding mistakes ([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), MIT).
+The three rules above are adapted from Andrej Karpathy's guidelines on LLM coding mistakes ([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills); its SKILL.md declares MIT, the repo has no LICENSE file — so the rules are paraphrased here, not copied). Worked bad/good code pairs for each rule: their [EXAMPLES.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/EXAMPLES.md).
 - **Readable over clever**: small honest functions, guard clauses, meaningful names, comments that explain *why* (`references/code-style.md`).
 - **One contract**: clients are generated from the API schema, never hand-written; one consistent, documented error format across every client.
 - **Observable from day one**: structured logs with a request/trace ID, and a metrics endpoint. The dashboards can wait; the instrumentation can't.

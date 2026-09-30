@@ -8,7 +8,7 @@ claude plugin eval . --case surgical-change --scaffold --allow-tools Edit --trus
 ```
 
 `--scaffold` runs each case's `fixture.sh` to build a small existing project first (endpoint-routing,
-surgical-change). Each case runs 3 times per arm; the README table shows the mean.
+surgical-change). Each case runs 3 times per arm; the Results table below shows the mean.
 
 ## Cases
 
@@ -30,12 +30,6 @@ Each case runs 3 times with the skill and 3 times without it, on the same model
 | Streaming endpoint in an existing Groundwork project: stack guide respected, typed events, native `EventSourceResponse` | 0.67 | 0.00 |
 | Search over Arabic PDFs: cross-lingual retrieval, a score threshold, per-language evals | 0.00 | 0.33 |
 | Fix one bug next to a tempting neighbour and unrelated dead code: nothing else edited | 1.00 | 1.00 |
-
-Run them yourself:
-
-```bash
-claude plugin eval . --scaffold --trust-plugin   # --scaffold builds the existing-project fixture
-```
 
 ## What the numbers mean (2026-09-24/26)
 

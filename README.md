@@ -50,8 +50,9 @@ If another marketplace on your machine offers a plugin with the same name, insta
 npx skills@latest add abdelrahmaan/groundwork
 ```
 
-It installs Markdown instructions and project templates only. Nothing runs on its own: no hooks, MCP
-servers, LSP servers or agents, no telemetry, no network calls.
+Either way you get Markdown instructions and project templates, nothing that runs on its own. The
+plugin declares no hooks, MCP servers, LSP servers or agents, sends no telemetry, and makes no network
+calls.
 
 <details>
 <summary><b>Install details: the two routes</b></summary>
@@ -78,7 +79,8 @@ before each kind of work.
 | `/groundwork add streaming to the chat endpoint` | one task in an existing project: no interview, only the questions the task needs |
 | `/groundwork review this branch` | reviews the branch against your project's stack guide |
 
-Inside a project Groundwork set up, it loads on its own. On the Skills CLI route there's no
+Inside a project Groundwork set up, it loads on its own. On an existing repo it reads
+`docs/stack-guide.md` first, and those decisions override its own defaults. On the Skills CLI route there's no
 `/groundwork` command: say "use groundwork" instead.
 
 ## What you get
@@ -192,7 +194,7 @@ To update by hand instead:
 claude plugin update abdokamar-groundwork@abdokamar
 ```
 
-**Skills CLI.** Run `npx skills@latest update groundwork` (`-g` for a global install, `-p` for a project one).
+**Skills CLI.** No automatic updates. Run `npx skills@latest update groundwork` (`-g` for a global install, `-p` for a project one).
 
 **claude.ai.** Re-upload the skill folder for each release.
 
@@ -226,7 +228,7 @@ skills/groundwork/
   assets/templates/               stack-guide, constitution-seed, Makefile, Dockerfile, compose, .env.example
   assets/CLAUDE.template.md       per-project CLAUDE.md
 commands/groundwork.md            the /groundwork slash command
-evals/                            eval cases and how they are measured — see evals/README.md
+evals/                            eval cases: prompt, graders, and a scaffolded project fixture (results: evals/README.md)
 .claude-plugin/                   plugin.json + marketplace.json
 ```
 
@@ -245,7 +247,8 @@ history.
   `/groundwork` or say "use groundwork" there.
 - **How it's tested.** Eval cases, method and results are in [`evals/README.md`](./evals/README.md).
 - **Freshness.** Checked against official docs on 2026-09-20; streaming, structured output and citations
-  re-tested against the installed libraries on 2026-09-24. Fast-moving areas (LangChain middleware,
+  re-tested against the installed libraries on 2026-09-24. Per-file version floors are noted inside.
+  Fast-moving areas (LangChain middleware,
   Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards) should
   be re-checked before adoption.
 

@@ -352,7 +352,7 @@ Non-negotiable read points — do these without being asked:
 | name anything, or write more than a few lines of code | `references/code-style.md` |
 | decide repo layout or contract distribution | `references/repo-and-kits.md` |
 | work with a spec workflow (Spec Kit, OpenSpec, Superpowers, other) | `references/spec-workflows.md` (+ `references/spec-kit.md` for Spec Kit) |
-| create project files | `assets/templates/` (stack-guide, constitution-seed, Makefile, Dockerfile, compose, `.env.example`) and `assets/CLAUDE.template.md` |
+| create project files | `assets/templates/` (stack-guide, constitution-seed, Makefile, Dockerfile, compose, `.env.example`, `.dockerignore`) and `assets/CLAUDE.template.md` |
 
 If a file listed here is missing, say so instead of proceeding from memory.
 

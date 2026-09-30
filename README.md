@@ -128,8 +128,7 @@ can't be built without, writes anything else it notices into the stack guide as 
 test-first.
 
 **Every project's `CLAUDE.md` carries four change rules** — think first, simplest thing that works,
-surgical edits, verifiable results — adapted from
-[Andrej Karpathy's guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (paraphrased; their SKILL.md declares MIT). `AGENTS.md`
+surgical edits, verifiable results. `AGENTS.md`
 is a symlink to it, so Cursor, Codex and other agents follow them too. The same rules are principle 13
 of the constitution seed. With Spec Kit that makes them a gate, not advice: `/speckit.plan` runs a
 Constitution Check that "must pass before Phase 0" and errors on unjustified violations, and
@@ -224,7 +223,7 @@ The search row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md
 load (see Notes). The bug-fix row shows current Claude is already surgical on a small fix; that case
 guards against regressions rather than measuring a gain.
 
-These are the signals Karpathy's guidelines name for "working": fewer unnecessary changes in diffs,
+These are the signals that the change rules are working: fewer unnecessary changes in diffs,
 fewer rewrites from overcomplication, and clarifying questions before implementation rather than
 after mistakes. The kickoff and bug-fix cases measure the first and last of those directly.
 
@@ -261,6 +260,11 @@ against the installed libraries on 2026-09-24, and OpenSpec 1.13.2 / Superpowers
 copies the same day. Per-file version floors are noted inside. Fast-moving
 areas (LangChain middleware, Spec Kit / OpenSpec / Superpowers commands, TanStack Start, MCP spec, embedding leaderboards)
 should be re-checked before adoption.
+
+## Credits
+
+The four change rules paraphrase Andrej Karpathy's guidelines on LLM coding mistakes
+([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), MIT per its SKILL.md).
 
 ## License
 

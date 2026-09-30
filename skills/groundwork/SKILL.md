@@ -279,8 +279,6 @@ How the work is done. Independent of stack; this is what makes the skill worth l
 - **Surgical changes**: every changed line traces to the request. Match the existing style, leave adjacent code alone, remove only what *your* change made unused, and mention unrelated dead code instead of deleting it.
 - **Goal-driven**: before starting, turn the task into a check you can run — a failing test, an eval, a command. Multi-step work gets a short plan where each step ends in `→ verify:`.
 - **Test-first** for endpoints and data tasks; an AI behavior change isn't done until its eval set has run.
-
-The three rules above are adapted from Andrej Karpathy's guidelines on LLM coding mistakes ([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills); its SKILL.md declares MIT, the repo has no LICENSE file — so the rules are paraphrased here, not copied). Worked bad/good code pairs for each rule: their [EXAMPLES.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/EXAMPLES.md).
 - **Readable over clever**: small honest functions, guard clauses, meaningful names, comments that explain *why* (`references/code-style.md`).
 - **One contract**: clients are generated from the API schema, never hand-written; one consistent, documented error format across every client.
 - **Observable from day one**: structured logs with a request/trace ID, and a metrics endpoint. The dashboards can wait; the instrumentation can't.
@@ -370,7 +368,7 @@ If a file listed here is missing, say so instead of proceeding from memory.
 | Web app: framework choice, structure, state, forms, streaming UI, RTL/i18n, testing, hosting | `references/frontend-web.md` |
 | Flutter app: architecture, Riverpod, dio, streaming, secure storage, offline, RTL, CI/CD | `references/mobile-flutter.md` |
 | uv, Makefile, Docker dev/prod, CI, observability, Locust, LiteLLM, vLLM, code review | `references/ops-and-review.md` |
-| Monorepo vs polyrepo, starter kits to borrow from, shared conventions | `references/repo-and-kits.md` |
+| Monorepo vs polyrepo, starter kits to study, shared conventions | `references/repo-and-kits.md` |
 | Naming conventions, readability rules, review smells | `references/code-style.md` |
 | LangChain vs LlamaIndex vs Haystack vs Pydantic AI vs no framework | `references/frameworks.md` |
 | Working alongside a spec workflow: detection, rules slot, who owns tasks | `references/spec-workflows.md` |

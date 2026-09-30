@@ -40,7 +40,7 @@ mobile-repo/           Flutter + generated Dart client
 ```
 Whatever the layout: one `CLAUDE.md`/`AGENTS.md` per repo, one Makefile per repo, one CI pipeline per repo.
 
-## 4. Starter kits worth borrowing from
+## 4. Starter kits worth studying
 
 - **fastapi/full-stack-fastapi-template** (official, MIT) — FastAPI + SQLModel + PostgreSQL + Alembic + React/TS/Vite + Tailwind/shadcn/ui + uv + Docker Compose + Playwright + JWT.
   *Good:* authoritative, modern, batteries-included; the best convention reference for decoupled React ↔ FastAPI. *Bad:* opinionated toward SQLModel/React/Postgres.

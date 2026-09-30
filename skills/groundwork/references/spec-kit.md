@@ -93,7 +93,7 @@ If `.specify/` exists in the repo, Spec Kit owns `tasks.md` per feature. Groundw
 7. `/speckit.plan` — don't retype the stack; point at the file: *"Follow docs/stack-guide.md exactly: FastAPI + Postgres/SQLAlchemy async, Qdrant hybrid + Cohere rerank, React+Vite+TanStack web, typed SSE. Do not introduce libraries outside it."*
 8. `/speckit.tasks` → `/speckit.analyze` (for anything non-trivial) → `/speckit.implement`.
 9. While implementing, this skill governs *how* each file is written (layering, naming, style, security).
-10. `/speckit.converge` until Converged, then run this kit's **code review checklist** (`ops-and-review.md` §8) as the human gate.
+10. `/speckit.converge` until Converged, then run this kit's **code review checklist** (`ops-and-review.md` §10) as the human gate.
 
 **Bugs**: use the `bug` extension; this kit still governs the fix's shape (and the bug becomes a test + a golden-set case if it's AI-related).
 

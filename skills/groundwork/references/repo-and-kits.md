@@ -56,4 +56,4 @@ Whatever the layout: one `CLAUDE.md`/`AGENTS.md` per repo, one Makefile per repo
 - Ship standards as **SKILL.md** files following the Agent Skills standard (agentskills.io) — portable across Claude Code, Codex, Cursor, Copilot, Gemini CLI. Required frontmatter: `name` + `description` (a wrong/missing description means the skill silently never triggers).
 - **AGENTS.md** is the cross-tool project-context file; Claude Code reads **CLAUDE.md**. Keep one file and symlink the other (`ln -s AGENTS.md CLAUDE.md`).
 - Per repo: short `CLAUDE.md` (decisions + commands + conventions) that points at this skill; the long-form standard stays in the skill.
-- Keep `tasks.md` as the work log the agent reads first.
+- Keep the active task list (`tasks.md`, or the spec workflow's own) as the work log the agent reads first.

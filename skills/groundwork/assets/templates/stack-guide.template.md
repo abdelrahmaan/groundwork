@@ -23,7 +23,7 @@
 **One user story, end to end, in production shape:**
 > <e.g. "An employee asks a question in Arabic and gets an answer with source citations.">
 
-**MVP task list** (only when no spec workflow is in use — otherwise its task list owns it):
+**MVP task list** (with a spec workflow it lives here until the workflow's own task list takes over; without one it lives in `tasks.md`):
 - [ ] <task>
 
 **In scope:** <3–5 bullets>

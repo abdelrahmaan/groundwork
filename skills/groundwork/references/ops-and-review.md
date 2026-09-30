@@ -152,5 +152,5 @@ Fix-first: list blocking issues first, then suggestions, then teaching notes.
 **Quality**
 - [ ] Tests added (red → green); dependency overrides, not patches.
 - [ ] Evals run if prompt/model/retrieval changed.
-- [ ] `tasks.md`, `README.md`, `CLAUDE.md`, `.env.example` updated as needed.
+- [ ] The active task list, `README.md`, `CLAUDE.md`, `.env.example` updated as needed.
 - [ ] Conventional commit message.

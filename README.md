@@ -19,6 +19,8 @@ Built for **API-first, Arabic-first products**:
 - **Web — React or Next.js**: React + Vite + TanStack by default behind a separate API; Next.js App Router when SEO matters. Tailwind + shadcn/ui, generated client, RTL-first.
 - **Mobile — Flutter**: Riverpod, dio, generated Dart client, secure storage, offline, RTL/i18n.
 - **One contract**: OpenAPI from FastAPI, RFC 9457 errors, typed SSE streaming events.
+- **Any model behind an OpenAI-compatible endpoint**: OpenAI, Azure, LiteLLM or self-hosted vLLM — switching is a `.env` change, not a code change.
+- **Grounded answers that stream with their sources**: `sources` first, the answer as tokens with inline `[n]` markers, then one `citation` per source it actually cited; markers the model invented are dropped.
 
 ## Install
 
@@ -167,16 +169,6 @@ against its docs on 2026-09-20. Other workflows get a five-step recipe that is l
 in [`references/spec-workflows.md`](./skills/groundwork/references/spec-workflows.md) and
 [`references/spec-kit.md`](./skills/groundwork/references/spec-kit.md).
 
-## Opinions it holds (and why)
-
-- **LangChain `create_agent` for the agent layer, your own code for retrieval.** Frameworks earn their place on the hard generic part (tool loop, state, interrupts, streaming); they cost you on the part that's specific to you (chunking, hybrid fusion, Arabic normalization). Full comparison with LlamaIndex, Haystack, Pydantic AI and DSPy in [`references/frameworks.md`](./skills/groundwork/references/frameworks.md).
-- **Grounded answers stream with their sources.** Retrieval sends `sources` first, the answer streams
-  as `token`s with inline `[n]` markers, then one `citation` per source actually cited, then `done`.
-  Markers the model invented are dropped. Structured output is kept out of the stream on purpose:
-  `with_structured_output` with a Pydantic schema returns once, at the end, and through
-  `create_agent` it streams as raw JSON (tested on LangChain 1.4.2, 2026-09-24).
-- **Every model behind an OpenAI-compatible endpoint** — OpenAI, Azure, LiteLLM, or self-hosted vLLM are a `.env` change, not a code change.
-
 ## What's inside
 
 The skill entry point stays small; the depth loads only when a task needs it.
@@ -207,32 +199,18 @@ evals/                            eval cases: prompt, graders, and a scaffolded 
 ## Does it help? Measured
 
 Each case runs 3 times with the skill and 3 times without it, on the same model
-(`claude plugin eval`, 2026-09-24/25):
+(`claude plugin eval`, 2026-09-24/26). Scores are the mean over 3 runs:
 
-| Case | Score with | Score without |
+| Case | With | Without |
 |---|---|---|
 | Kickoff for a new Arabic app: 3-way language profile, options with a recommendation, the kickoff files named | 1.00 | 0.00 |
 | Streaming endpoint in an existing Groundwork project: stack guide respected, typed events, native `EventSourceResponse` | 0.67 | 0.00 |
-| Search over Arabic PDFs, sharpened to cross-lingual retrieval, a score threshold, per-language evals | 0.00 | 0.33 |
-| Fix one bug next to a tempting neighbour and unrelated dead code: fix lands, nothing else edited, the test named | 1.00 | 1.00 |
+| Search over Arabic PDFs: cross-lingual retrieval, a score threshold, per-language evals | 0.00 | 0.33 |
+| Fix one bug next to a tempting neighbour and unrelated dead code: nothing else edited | 1.00 | 1.00 |
 
-Scores are the mean over 3 runs. On the endpoint case, all 3 runs with the skill used
-`EventSourceResponse` (none without it); 1 of 3 passed every criterion.
-
-The search row is the known gap: on a fresh prompt with no Groundwork `CLAUDE.md`, the skill didn't
-load (see Notes). The bug-fix row shows current Claude is already surgical on a small fix; that case
-guards against regressions rather than measuring a gain.
-
-These are the signals that the change rules are working: fewer unnecessary changes in diffs,
-fewer rewrites from overcomplication, and clarifying questions before implementation rather than
-after mistakes. The kickoff and bug-fix cases measure the first and last of those directly.
-
-`claude plugin eval` does not load the project's `CLAUDE.md` (a "start every reply with PINEAPPLE"
-`CLAUDE.md` was followed 2 of 2 times by `claude -p`, 0 of 2 inside an eval run), so the generated
-`CLAUDE.md` is measured through real Claude Code with `evals/claude-md-ab.sh`. With and without its
-"How to change code here" block, Claude named the unused function and left it alone 5 of 5 times;
-1 of 5 runs without the block edited files beyond the fix, 0 of 5 with it — a small sample, not a
-proven gain.
+The search row is the known gap (the skill didn't load on that fresh prompt — see Notes); the bug-fix
+row shows Claude is already surgical on a small fix. Method, caveats and how the generated `CLAUDE.md`
+is measured: [`evals/README.md`](./evals/README.md).
 
 ```bash
 claude plugin eval . --scaffold --trust-plugin   # --scaffold builds the existing-project fixture
@@ -240,8 +218,10 @@ claude plugin eval . --scaffold --trust-plugin   # --scaffold builds the existin
 
 ## Contributing
 
-Issues and pull requests are welcome. CI runs `claude plugin validate --strict` on both manifests
-and checks every skill's frontmatter budget, so run those locally before opening a PR:
+Issues are welcome — bug reports, a rule that misfired, a stack you wish it covered. For a pull
+request, open an issue first so we agree on the change: every rule here is measured or sourced, and
+a rule added without that tends to contradict another one. CI runs `claude plugin validate --strict`
+on both manifests and checks the skill frontmatter; run those locally before a PR:
 
 ```bash
 claude plugin validate .claude-plugin/marketplace.json --strict

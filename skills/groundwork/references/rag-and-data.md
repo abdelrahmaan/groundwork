@@ -20,7 +20,7 @@ Stages, each independently re-runnable and idempotent:
 
 ## 3. Embedding & reranking models — pick by language
 
-**Embeddings — pick one, record it in `CLAUDE.md`:**
+**Embeddings — pick one, record it in `docs/stack-guide.md` §4:**
 | Model | Why | When |
 |---|---|---|
 | **BGE-M3** (self-hosted) | best measured Arabic retrieval in the 2026 Arabic-RAG study; one model gives dense + sparse + ColBERT multi-vector (your hybrid stack for free); 100+ languages, 8K context | default for Arabic-first, on-prem, or cost-sensitive |

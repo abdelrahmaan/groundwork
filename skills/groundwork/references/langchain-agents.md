@@ -1,6 +1,6 @@
 # LangChain Agents Standard
 
-Version floors: `langchain` ≥ 1.3 (event streaming — it requires `langgraph` ≥ 1.2.0, the first release with `version="v3"`; `ToolErrorMiddleware` needs ≥ 1.3.14), `deepagents` ≥ 0.7 (planning is opt-in).
+Version floors: `langchain` ≥ 1.3.14 for the default stack in §9, which uses `ToolErrorMiddleware` — first shipped in 1.3.14, absent from 1.3.13 (checked on PyPI 2026-09-30); ≥ 1.3 otherwise (event streaming — it requires `langgraph` ≥ 1.2.0, the first release with `version="v3"`), `deepagents` ≥ 0.7 (planning is opt-in).
 Implementation: fetch current docs via the LangChain docs MCP or Context7 — these APIs change monthly.
 
 ## Contents
@@ -125,13 +125,15 @@ Pick the **lowest rung** that solves the problem (each rung adds latency, cost, 
 ## 9. Default production middleware stack (order matters)
 
 1. Input guard (deterministic: length, banned topics, injection patterns) — `before_agent`
-2. `PIIMiddleware` (input; output/tool results if sensitive domain)
-3. `ModelCallLimitMiddleware` + `ToolCallLimitMiddleware`
-4. `ModelFallbackMiddleware` → `ModelRetryMiddleware`
-5. `ToolRetryMiddleware` (inner, `on_failure="error"`) + `ToolErrorMiddleware`
-6. `SummarizationMiddleware` / `ContextEditingMiddleware` — only for long conversations
-7. `HumanInTheLoopMiddleware` — on any write/destructive tool
-8. Output guard (model-based, last) — `after_agent`
+2. Output guard (model-based) — `after_agent`. Listed second so it runs **last** on the way out:
+   `after_*` hooks run in reverse list order (measured on `langchain` 1.4.2, 2026-09-30), so a guard
+   listed at the bottom would run first — before the deterministic PII pass below.
+3. `PIIMiddleware` (input; output/tool results if sensitive domain)
+4. `ModelCallLimitMiddleware` + `ToolCallLimitMiddleware`
+5. `ModelFallbackMiddleware` → `ModelRetryMiddleware`
+6. `ToolRetryMiddleware` (inner, `on_failure="error"`) + `ToolErrorMiddleware`
+7. `SummarizationMiddleware` / `ContextEditingMiddleware` — only for long conversations
+8. `HumanInTheLoopMiddleware` — on any write/destructive tool
 
 Verify the exact composition semantics in the docs when combining retry + fallback + error middleware.
 

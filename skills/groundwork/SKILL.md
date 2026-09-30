@@ -52,7 +52,7 @@ Explain the plan before executing. Answer the question that was asked — don't 
 When the repo already has code or a `docs/stack-guide.md`, a request like "add an endpoint" is a task, not a kickoff. Don't run Discovery or walk the whole Decision Register.
 1. Read `docs/stack-guide.md`, `CLAUDE.md`, and the active task list first. The stack guide is binding.
 2. Ask **only the decisions this task cannot proceed without** — with options and a recommendation, as in §1.1.
-3. Any other open item you notice goes into the stack guide as **OPEN** (§4 open questions, with an owner and a date). Don't ask about it now.
+3. Any other open item you notice goes into the stack guide as **OPEN** (its §4 open-questions list, with an owner and a date). Don't ask about it now.
 4. No stack guide but existing code: state the stack you read from the code in one line, follow it, and offer to write a stack guide later — never a kickoff interview.
 5. Then build the task by §8 — surgically (§7.2): only the lines this task needs.
 
@@ -161,7 +161,7 @@ Rules for these outputs:
 - Project files (`app/`, `Makefile`, `Dockerfile`, …) get created later, one at a time, as §4's gate allows — copy them from `assets/templates/` when the need appears.
 
 **Handoff after kickoff**
-- With Spec Kit: `/speckit.constitution` (paste the seed) → `/speckit.specify` → `/speckit.clarify` → `/speckit.plan` (argument: "follow docs/stack-guide.md exactly") → `/speckit.tasks` → `/speckit.implement` → `/speckit.converge`. See `references/spec-kit.md`.
+- With Spec Kit: `/speckit.constitution` (paste the seed) → `/speckit.specify` → `/speckit.clarify` → `/speckit.plan` (argument: "follow docs/stack-guide.md exactly") → `/speckit.tasks` → `/speckit.analyze` (anything non-trivial) → `/speckit.implement` → `/speckit.converge`. See `references/spec-kit.md`.
 - With OpenSpec: write `openspec/config.yaml` `context`/`rules` from the seed → `/opsx:propose` → `/opsx:apply` → review → `/opsx:archive`. See `references/spec-workflows.md` §4.
 - With Superpowers: `CLAUDE.md` is the rules slot → `brainstorming` (per feature; approaches stay inside the stack guide) → `writing-plans` (stack guide in Global Constraints) → `subagent-driven-development`. See `references/spec-workflows.md` §3.
 - Another workflow: `references/spec-workflows.md` §6.
@@ -176,11 +176,11 @@ Before creating **any** file, directory, service, or dependency, it must pass al
 2. **Used this week**: the MVP path actually runs through it.
 3. **Nothing simpler works**: no existing file or a few lines elsewhere would do.
 
-If any answer is no → don't create it; note it in `tasks.md` under "Later".
+If any answer is no → don't create it; note it under "Later" in the active task list (`tasks.md`, or stack guide §2 when a spec workflow owns tasks).
 
 **The MVP slice**: one user story, end to end, in production shape (typed, tested, logged) — not a prototype, not a half of every feature.
 
-Default MVP inventory (a backend + AI service): `app/main.py`, `core/config.py`, one router, one service, one repository, one schema module, one factory module if AI is involved, `tests/`, `Makefile`, `Dockerfile` + `compose.yaml` + override, `.env.example`, `CLAUDE.md`, `tasks.md`, `README.md`. That's it.
+Default MVP inventory (a backend + AI service): `app/main.py`, `core/config.py`, one router, one service, one repository, one schema module, one factory module if AI is involved, `tests/`, `Makefile`, `Dockerfile` + `compose.yaml` + override, `.env.example`, `CLAUDE.md`, `tasks.md` (only without a spec workflow), `README.md`. That's it.
 
 Deferred until the trigger fires: Redis (no measured hot path yet), queue/worker (no job over a second), multi-tenancy (one tenant), rate limiting (one client), the Prometheus/Grafana stack (no traffic yet — but expose `/metrics` and log structurally from day one so it's a config change later, not a refactor), the mobile app (no mobile need proven), CI matrices, k8s manifests, feature flags, caching layers, subagents.
 
@@ -250,7 +250,7 @@ This is the **checklist of what must be decided**, with the kit's recommendation
 | 25 | Contract | **OpenAPI is the single source of truth** (FastAPI generates it); versioned; contract-tested with Schemathesis |
 | 26 | Repo layout | pragmatic middle: **monorepo (pnpm + Turborepo) for web + shared TS contract**, separate repos for FastAPI and Flutter, linked by the published spec. Full monorepo if the three change together; polyrepo if they rarely do |
 
-Record every answer in the project `CLAUDE.md` → "Decisions".
+Record every answer in `docs/stack-guide.md` §4 (Decisions) — `CLAUDE.md` only links to it.
 
 ---
 
@@ -282,7 +282,7 @@ How the work is done. Independent of stack; this is what makes the skill worth l
 - **Readable over clever**: small honest functions, guard clauses, meaningful names, comments that explain *why* (`references/code-style.md`).
 - **One contract**: clients are generated from the API schema, never hand-written; one consistent, documented error format across every client.
 - **Observable from day one**: structured logs with a request/trace ID, and a metrics endpoint. The dashboards can wait; the instrumentation can't.
-- **Docs are part of done**: `tasks.md` every task; `README.md` / `CLAUDE.md` / `.env.example` when affected.
+- **Docs are part of done**: the active task list every task; `README.md` / `CLAUDE.md` / `.env.example` when affected.
 
 ### 7.3 Defaults — recommended, and changeable
 These are the kit's opinions, each with a reason and a trigger for the alternative. Offer them, explain them, take the user's answer, and record the outcome in `docs/stack-guide.md`. **Never present a default as a requirement.**
@@ -296,7 +296,7 @@ These are the kit's opinions, each with a reason and a trigger for the alternati
 | Architecture | layered: routers → services → repositories, with factories for external clients | keeps I/O at the edges and logic testable | vertical-slice or hexagonal suits the domain better |
 | Config | Pydantic `BaseSettings` singleton | typed, validated, fails fast | another config system is already in place |
 | Error format | RFC 9457 problem+json | a standard clients already understand | an existing API convention must be matched |
-| Streaming | typed SSE events (`token`, `tool_call`, `sources`, `citation`, `interrupt`, `error`, `done`) | carries more than text; framework-agnostic | the frontend adopts a protocol end to end (Vercel AI SDK, LangGraph SDK) |
+| Streaming | typed SSE events (`run_started`, `token`, `tool_call`, `tool_result`, `sources`, `citation`, `interrupt`, `error`, `done`) | carries more than text; framework-agnostic | the frontend adopts a protocol end to end (Vercel AI SDK, LangGraph SDK) |
 | Agent layer | LangChain `create_agent` | mature runtime: middleware, checkpointing, interrupts, streaming | rungs 1–4 need no framework; Pydantic AI for small typed services; Haystack for pipeline-style RAG; LlamaIndex when its retrieval/parsing is the point (`references/frameworks.md`) |
 | Retrieval code | your own, behind a repository/factory | the hard parts (hybrid fusion, Arabic normalization, filters) are project-specific | a framework's retriever genuinely covers the case and you accept its ranking |
 | Evals | Ragas + an LLM judge with a rubric | measurable gate on prompt/model/retrieval changes | DeepEval/promptfoo fit the workflow better |
@@ -396,6 +396,6 @@ app/
   deps.py
 migrations/ tests/ scripts/ load/ docs/specs/ docs/plans/
 pyproject.toml uv.lock Makefile Dockerfile compose.yaml compose.override.yaml compose.prod.yaml
-.env.example CLAUDE.md tasks.md README.md
+.env.example CLAUDE.md README.md   tasks.md (only without a spec workflow)
 ```
 Many domains → switch to **domain-first** folders (each holding router/service/repository/schemas); the layering stays identical. Decide at kickoff.

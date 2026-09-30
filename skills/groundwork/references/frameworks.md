@@ -69,7 +69,7 @@ So the kit's **default** is split on purpose — it's a recommendation with reas
 
 **Rules that follow from whichever choice is made**
 - **One agent runtime per project.** A retrieval or parsing *library* from another ecosystem is allowed if it's contained behind your repository/factory interface — two agent runtimes are not.
-- Retrieval is **your code**: hybrid query, RRF, rerank, filters, Arabic normalization. Frameworks call into it as a tool; they don't own it.
+- By default, retrieval is **your code**: hybrid query, RRF, rerank, filters, Arabic normalization. Frameworks call into it as a tool; they don't own it. If the user chose a framework's retriever (SKILL.md §7.3), follow that choice instead.
 - Pin versions, keep the framework behind factories, and never let framework types leak into your API schemas — so switching later is a contained change, not a rewrite.
 
 ## 4. Where a framework choice is actually wrong

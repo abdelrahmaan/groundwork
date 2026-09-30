@@ -18,7 +18,7 @@ $ARGUMENTS
 Routing:
 - **Empty request** — start Kickoff mode (§1.1) from the first question.
 - **A new product or project** — Kickoff mode (§1.1): Discovery, then the Decision
-  Register, then the four kickoff outputs, then the MVP slice.
+  Register, then the kickoff outputs (§3), then the MVP slice.
 - **One task in an existing repo** — Task mode (§1.5): read `docs/stack-guide.md`,
   `CLAUDE.md` and the task list first; the stack guide is binding. Ask only what the task
   can't proceed without, record other open items as OPEN, and build it surgically. No
